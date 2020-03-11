@@ -1,0 +1,743 @@
+%%% ====================================================================
+%%%  BibTeX-file{
+%%%     author          = "Gerry Murray",
+%%%     version         = "1.2",
+%%%     date            = "2 April 2012",
+%%%     filename        = "acmsmall-sample-bibfile.bib",
+%%%     address         = "ACM, NY",
+%%%     email           = "murray at hq.acm.org",
+%%%     codetable       = "ISO/ASCII",
+%%%     keywords        = "ACM Reference Format, bibliography, citation, references",
+%%%     supported       = "yes",
+%%%     docstring       = "This BibTeX database file contains 'bibdata' entries
+%%%                        that 'match' the examples provided in the Specifications Document
+%%%                        AND, also, 'legacy'-type bibs. It should assist authors in
+%%%                        choosing the 'correct' at-bibtype and necessary bib-fields
+%%%                        so as to obtain the appropriate ACM Reference Format output.
+%%%                        It also contains many 'Standard Abbreviations'. "
+%%%  }
+%%% ====================================================================
+
+% Journals
+
+% First the Full Name is given, then the abbreviation used in the AMS Math
+% Reviews, with an indication if it could not be found there.
+% Note the 2nd overwrites the 1st, so swap them if you want the full name.
+
+ %{AMS}
+ @String{AMSTrans = "American Mathematical Society Translations" }
+ @String{AMSTrans = "Amer. Math. Soc. Transl." }
+ @String{BullAMS = "Bulletin of the American Mathematical Society" }
+ @String{BullAMS = "Bull. Amer. Math. Soc." }
+ @String{ProcAMS = "Proceedings of the American Mathematical Society" }
+ @String{ProcAMS = "Proc. Amer. Math. Soc." }
+ @String{TransAMS = "Transactions of the American Mathematical Society" }
+ @String{TransAMS = "Trans. Amer. Math. Soc." }
+
+ %ACM
+ @String{CACM = "Communications of the {ACM}" }
+ @String{CACM = "Commun. {ACM}" }
+ @String{CompServ = "Comput. Surveys" }
+ @String{JACM = "J. ACM" }
+ @String{ACMMathSoft = "{ACM} Transactions on Mathematical Software" }
+ @String{ACMMathSoft = "{ACM} Trans. Math. Software" }
+ @String{SIGNUM = "{ACM} {SIGNUM} Newsletter" }
+ @String{SIGNUM = "{ACM} {SIGNUM} Newslett." }
+
+ @String{AmerSocio = "American Journal of Sociology" }
+ @String{AmerStatAssoc = "Journal of the American Statistical Association" }
+ @String{AmerStatAssoc = "J. Amer. Statist. Assoc." }
+ @String{ApplMathComp = "Applied Mathematics and Computation" }
+ @String{ApplMathComp = "Appl. Math. Comput." }
+ @String{AmerMathMonthly = "American Mathematical Monthly" }
+ @String{AmerMathMonthly = "Amer. Math. Monthly" }
+ @String{BIT = "{BIT}" }
+ @String{BritStatPsych = "British Journal of Mathematical and Statistical
+          Psychology" }
+ @String{BritStatPsych = "Brit. J. Math. Statist. Psych." }
+ @String{CanMathBull = "Canadian Mathematical Bulletin" }
+ @String{CanMathBull = "Canad. Math. Bull." }
+ @String{CompApplMath = "Journal of Computational and Applied Mathematics" }
+ @String{CompApplMath = "J. Comput. Appl. Math." }
+ @String{CompPhys = "Journal of Computational Physics" }
+ @String{CompPhys = "J. Comput. Phys." }
+ @String{CompStruct = "Computers and Structures" }
+ @String{CompStruct = "Comput. \& Structures" }
+ @String{CompJour = "The Computer Journal" }
+ @String{CompJour = "Comput. J." }
+ @String{CompSysSci = "Journal of Computer and System Sciences" }
+ @String{CompSysSci = "J. Comput. System Sci." }
+ @String{Computing = "Computing" }
+ @String{ContempMath = "Contemporary Mathematics" }
+ @String{ContempMath = "Contemp. Math." }
+ @String{Crelle = "Crelle's Journal" }
+ @String{GiornaleMath = "Giornale di Mathematiche" }
+ @String{GiornaleMath = "Giorn. Mat." } % didn't find in AMS MR., ibid.
+
+ %IEEE
+ @String{Computer = "{IEEE} Computer" }
+ @String{IEEETransComp = "{IEEE} Transactions on Computers" }
+ @String{IEEETransComp = "{IEEE} Trans. Comput." }
+ @String{IEEETransAC = "{IEEE} Transactions on Automatic Control" }
+ @String{IEEETransAC = "{IEEE} Trans. Automat. Control" }
+ @String{IEEESpec = "{IEEE} Spectrum" } % didn't find in AMS MR
+ @String{ProcIEEE = "Proceedings of the {IEEE}" }
+ @String{ProcIEEE = "Proc. {IEEE}" } % didn't find in AMS MR
+ @String{IEEETransAeroElec = "{IEEE} Transactions on Aerospace and Electronic
+     Systems" }
+ @String{IEEETransAeroElec = "{IEEE} Trans. Aerospace Electron. Systems" }
+
+ @String{IMANumerAna = "{IMA} Journal of Numerical Analysis" }
+ @String{IMANumerAna = "{IMA} J. Numer. Anal." }
+ @String{InfProcLet = "Information Processing Letters" }
+ @String{InfProcLet = "Inform. Process. Lett." }
+ @String{InstMathApp = "Journal of the Institute of Mathematics and
+     its Applications" }
+ @String{InstMathApp = "J. Inst. Math. Appl." }
+ @String{IntControl = "International Journal of Control" }
+ @String{IntControl = "Internat. J. Control" }
+ @String{IntNumerEng = "International Journal for Numerical Methods in
+     Engineering" }
+ @String{IntNumerEng = "Internat. J. Numer. Methods Engrg." }
+ @String{IntSuper = "International Journal of Supercomputing Applications" }
+ @String{IntSuper = "Internat. J. Supercomputing Applic." } % didn't find
+%% in AMS MR
+ @String{Kibernetika = "Kibernetika" }
+ @String{JResNatBurStand = "Journal of Research of the National Bureau
+     of Standards" }
+ @String{JResNatBurStand = "J. Res. Nat. Bur. Standards" }
+ @String{LinAlgApp = "Linear Algebra and its Applications" }
+ @String{LinAlgApp = "Linear Algebra Appl." }
+ @String{MathAnaAppl = "Journal of Mathematical Analysis and Applications" }
+ @String{MathAnaAppl = "J. Math. Anal. Appl." }
+ @String{MathAnnalen = "Mathematische Annalen" }
+ @String{MathAnnalen = "Math. Ann." }
+ @String{MathPhys = "Journal of Mathematical Physics" }
+ @String{MathPhys = "J. Math. Phys." }
+ @String{MathComp = "Mathematics of Computation" }
+ @String{MathComp = "Math. Comp." }
+ @String{MathScand = "Mathematica Scandinavica" }
+ @String{MathScand = "Math. Scand." }
+ @String{TablesAidsComp = "Mathematical Tables and Other Aids to Computation" }
+ @String{TablesAidsComp = "Math. Tables Aids Comput." }
+ @String{NumerMath = "Numerische Mathematik" }
+ @String{NumerMath = "Numer. Math." }
+ @String{PacificMath = "Pacific Journal of Mathematics" }
+ @String{PacificMath = "Pacific J. Math." }
+ @String{ParDistComp = "Journal of Parallel and Distributed Computing" }
+ @String{ParDistComp = "J. Parallel and Distrib. Comput." } % didn't find
+%% in AMS MR
+ @String{ParComputing = "Parallel Computing" }
+ @String{ParComputing = "Parallel Comput." }
+ @String{PhilMag = "Philosophical Magazine" }
+ @String{PhilMag = "Philos. Mag." }
+ @String{ProcNAS = "Proceedings of the National Academy of Sciences
+                    of the USA" }
+ @String{ProcNAS = "Proc. Nat. Acad. Sci. U. S. A." }
+ @String{Psychometrika = "Psychometrika" }
+ @String{QuartMath = "Quarterly Journal of Mathematics, Oxford, Series (2)" }
+ @String{QuartMath = "Quart. J. Math. Oxford Ser. (2)" }
+ @String{QuartApplMath = "Quarterly of Applied Mathematics" }
+ @String{QuartApplMath = "Quart. Appl. Math." }
+ @String{RevueInstStat = "Review of the International Statisical Institute" }
+ @String{RevueInstStat = "Rev. Inst. Internat. Statist." }
+
+ %SIAM
+ @String{JSIAM = "Journal of the Society for Industrial and Applied
+     Mathematics" }
+ @String{JSIAM = "J. Soc. Indust. Appl. Math." }
+ @String{JSIAMB = "Journal of the Society for Industrial and Applied
+     Mathematics, Series B, Numerical Analysis" }
+ @String{JSIAMB = "J. Soc. Indust. Appl. Math. Ser. B Numer. Anal." }
+ @String{SIAMAlgMeth = "{SIAM} Journal on Algebraic and Discrete Methods" }
+ @String{SIAMAlgMeth = "{SIAM} J. Algebraic Discrete Methods" }
+ @String{SIAMAppMath = "{SIAM} Journal on Applied Mathematics" }
+ @String{SIAMAppMath = "{SIAM} J. Appl. Math." }
+ @String{SIAMComp = "{SIAM} Journal on Computing" }
+ @String{SIAMComp = "{SIAM} J. Comput." }
+ @String{SIAMMatrix = "{SIAM} Journal on Matrix Analysis and Applications" }
+ @String{SIAMMatrix = "{SIAM} J. Matrix Anal. Appl." }
+ @String{SIAMNumAnal = "{SIAM} Journal on Numerical Analysis" }
+ @String{SIAMNumAnal = "{SIAM} J. Numer. Anal." }
+ @String{SIAMReview = "{SIAM} Review" }
+ @String{SIAMReview = "{SIAM} Rev." }
+ @String{SIAMSciStat = "{SIAM} Journal on Scientific and Statistical
+     Computing" }
+ @String{SIAMSciStat = "{SIAM} J. Sci. Statist. Comput." }
+
+ @String{SoftPracExp = "Software Practice and Experience" }
+ @String{SoftPracExp = "Software Prac. Experience" } % didn't find in AMS MR
+ @String{StatScience = "Statistical Science" }
+ @String{StatScience = "Statist. Sci." }
+ @String{Techno = "Technometrics" }
+ @String{USSRCompMathPhys = "{USSR} Computational Mathematics and Mathematical
+     Physics" }
+ @String{USSRCompMathPhys = "{U. S. S. R.} Comput. Math. and Math. Phys." }
+ @String{VLSICompSys = "Journal of {VLSI} and Computer Systems" }
+ @String{VLSICompSys = "J. {VLSI} Comput. Syst." }
+ @String{ZAngewMathMech = "Zeitschrift fur Angewandte Mathematik und
+     Mechanik" }
+ @String{ZAngewMathMech = "Z. Angew. Math. Mech." }
+ @String{ZAngewMathPhys = "Zeitschrift fur Angewandte Mathematik und Physik" }
+ @String{ZAngewMathPhys = "Z. Angew. Math. Phys." }
+
+% Publishers % ================================================= |
+
+ @String{Academic = "Academic Press" }
+ @String{ACMPress = "{ACM} Press" }
+ @String{AdamHilger = "Adam Hilger" }
+ @String{AddisonWesley = "Addison-Wesley" }
+ @String{AllynBacon = "Allyn and Bacon" }
+ @String{AMS = "American Mathematical Society" }
+ @String{Birkhauser = "Birkha{\"u}ser" }
+ @String{CambridgePress = "Cambridge University Press" }
+ @String{Chelsea = "Chelsea" }
+ @String{ClaredonPress = "Claredon Press" }
+ @String{DoverPub = "Dover Publications" }
+ @String{Eyolles = "Eyolles" }
+ @String{HoltRinehartWinston = "Holt, Rinehart and Winston" }
+ @String{Interscience = "Interscience" }
+ @String{JohnsHopkinsPress = "The Johns Hopkins University Press" }
+ @String{JohnWileySons = "John Wiley and Sons" }
+ @String{Macmillan = "Macmillan" }
+ @String{MathWorks = "The Math Works Inc." }
+ @String{McGrawHill = "McGraw-Hill" }
+ @String{NatBurStd = "National Bureau of Standards" }
+ @String{NorthHolland = "North-Holland" }
+ @String{OxfordPress = "Oxford University Press" }  %address Oxford or London?
+ @String{PergamonPress = "Pergamon Press" }
+ @String{PlenumPress = "Plenum Press" }
+ @String{PrenticeHall = "Prentice-Hall" }
+ @String{SIAMPub = "{SIAM} Publications" }
+ @String{Springer = "Springer-Verlag" }
+ @String{TexasPress = "University of Texas Press" }
+ @String{VanNostrand = "Van Nostrand" }
+ @String{WHFreeman = "W. H. Freeman and Co." }
+
+%Entries
+
+@article{DQN,
+	title={Playing atari with deep reinforcement learning},
+	author={Mnih, Volodymyr and Kavukcuoglu, Koray and Silver, David and Graves, Alex and Antonoglou, Ioannis and Wierstra, Daan and Riedmiller, Martin},
+	journal={arXiv preprint arXiv:1312.5602},
+	year={2013}
+}
+
+@inproceedings{DeepN-JPEG,
+	title={DeepN-JPEG: a deep neural network favorable JPEG-based image compression framework},
+	author={Liu, Zihao and Liu, Tao and Wen, Wujie and Jiang, Lei and Xu, Jie and Wang, Yanzhi and Quan, Gang},
+	booktitle={Proceedings of the 55th Annual Design Automation Conference},
+	pages={18},
+	year={2018},
+	organization={ACM}
+}
+
+
+@article{ImageNet,
+	Author = {Olga Russakovsky and Jia Deng and Hao Su and Jonathan Krause and Sanjeev Satheesh and Sean Ma and Zhiheng Huang and Andrej Karpathy and Aditya Khosla and Michael Bernstein and Alexander C. Berg and Li Fei-Fei},
+	Title = {{ImageNet Large Scale Visual Recognition Challenge}},
+	Year = {2015},
+	journal   = {International Journal of Computer Vision (IJCV)},
+	doi = {10.1007/s11263-015-0816-y},
+	volume={115},
+	number={3},
+	pages={211-252}
+}
+
+
+@inproceedings{MobileNetV2,
+	title={Mobilenetv2: Inverted residuals and linear bottlenecks},
+	author={Sandler, Mark and Howard, Andrew and Zhu, Menglong and Zhmoginov, Andrey and Chen, Liang-Chieh},
+	booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+	pages={4510--4520},
+	year={2018}
+}
+
+
+@inproceedings{grad-cam,
+	title={Grad-cam: Visual explanations from deep networks via gradient-based localization},
+	author={Selvaraju, Ramprasaath R and Cogswell, Michael and Das, Abhishek and Vedantam, Ramakrishna and Parikh, Devi and Batra, Dhruv},
+	booktitle={Proceedings of the IEEE International Conference on Computer Vision},
+	pages={618--626},
+	year={2017}
+}
+
+@inproceedings{DNIM,
+	title={Evaluating local features for day-night matching},
+	author={Zhou, Hao and Sattler, Torsten and Jacobs, David W},
+	booktitle={European Conference on Computer Vision},
+	pages={724--736},
+	year={2016},
+	organization={Springer}
+}
+
+@misc{baidu_vision,
+	author={Baidu},
+	title={Baidu AI Open Platform},
+	year={2019},
+	howpublished={\url{https://ai.baidu.com/}},
+}
+
+@misc{ILSVRC12,
+	author={Olga R, Jia D et al.},
+	title={ImageNet Large Scale Visual Recognition Challenge 2012},
+	year={2012},
+	howpublished={\url{http://image-net.org/challenges/LSVRC/2012/}},
+}
+
+
+
+@misc{face++_service,
+	author={Face++},
+	title={Face++ Cognitive Services},
+	year={2019},
+	howpublished={\url{https://www.faceplusplus.com/}},
+}
+
+@misc{amazon_rekognition,
+	author={Amazon},
+	title={Amazon Rekognition},
+	year={2019},
+	howpublished={\url{https://aws.amazon.com/rekognition/}},
+}
+
+@misc{pillow_benchmark,
+	author={Python Imaging Library},
+	title={Image file formats},
+	year={2019},
+	howpublished={\url{https://pillow.readthedocs.io/en/3.1.x/handbook/image-file-formats.html}},
+}
+
+@misc{speedtest,
+	author={SpeedTest},
+	title={Speedtest Global Index},
+	year={2019},
+	howpublished={\url{https://www.speedtest.net/global-index}},
+}
+
+@misc{google-tpu,
+	author={Google.Inc.},
+	title={Google Edge TPU},
+	year={2019},
+	howpublished={\url{https://cloud.google.com/edge-tpu/}},
+}
+
+@misc{huawei-atlas500,
+	author={Huawei},
+	title={Huawei Atlas 500 Edge Station},
+	year={2019},
+	howpublished={\url{https://e.huawei.com/en/products/cloud-computing-dc/servers/g-series/atlas-500}},
+}
+
+@article{jpeg,
+	title={The JPEG still picture compression standard},
+	author={Wallace, Gregory K},
+	journal={IEEE transactions on consumer electronics},
+	volume={38},
+	number={1},
+	pages={xviii--xxxiv},
+	year={1992},
+	publisher={IEEE}
+}
+
+@misc{imgmin,
+	author={rflynn},
+	title={Lossy image optimization},
+	year={2019},
+	howpublished={\url{https://github.com/rflynn/imgmin}},
+}
+
+@misc{tegratx2,
+	author={NVIDIA},
+	title={NVIDIA Jetson TX2 delivers twice the intelligence to the edge},
+	year={2017},
+	howpublished={\url{https://devblogs.nvidia.com/jetson-tx2-delivers-twice-intelligence-edge/}},
+}
+
+
+@article{prun_quanti,
+	title={A deep neural network compression pipeline: Pruning, quantization, huffman encoding},
+	author={Han, Song and Mao, Huizi and Dally, William J},
+	journal={arXiv preprint arXiv:1510.00149},
+	volume={10},
+	year={2015}
+}
+
+@inproceedings{quantize,
+	title={Fixed point optimization of deep convolutional neural networks for object recognition},
+	author={Anwar, Sajid and Hwang, Kyuyeon and Sung, Wonyong},
+	booktitle={Acoustics, Speech and Signal Processing (ICASSP), 2015 IEEE International Conference on},
+	pages={1131--1135},
+	year={2015},
+	organization={IEEE}
+}
+
+@inproceedings{quantize_3bit,
+	title={Fixed-point feedforward deep neural network design using weights+ 1, 0, and- 1},
+	author={Hwang, Kyuyeon and Sung, Wonyong},
+	booktitle={Signal Processing Systems (SiPS), 2014 IEEE Workshop on},
+	pages={1--6},
+	year={2014},
+	organization={IEEE}
+}
+
+
+@article{quantization,
+	title={Compressing deep convolutional networks using vector quantization},
+	author={Gong, Yunchao and Liu, Liu and Yang, Ming and Bourdev, Lubomir},
+	journal={arXiv preprint arXiv:1412.6115},
+	year={2014}
+}
+
+@inproceedings{pruning_han,
+	title={Learning both weights and connections for efficient neural network},
+	author={Han, Song and Pool, Jeff and Tran, John and Dally, William},
+	booktitle={Advances in neural information processing systems},
+	pages={1135--1143},
+	year={2015}
+}
+
+@article{structured_pruning,
+	title={Structured pruning of deep convolutional neural networks},
+	author={Anwar, Sajid and Hwang, Kyuyeon and Sung, Wonyong},
+	journal={ACM Journal on Emerging Technologies in Computing Systems (JETC)},
+	volume={13},
+	number={3},
+	pages={32},
+	year={2017},
+	publisher={ACM}
+}
+
+@inproceedings{ILP_Decoupling,
+	title={Energy and Performance Efficient Computation Offloading for Deep Neural Networks in a Mobile Cloud Computing Environment},
+	author={Eshratifar, Amir Erfan and Pedram, Massoud},
+	booktitle={Proceedings of the 2018 on Great Lakes Symposium on VLSI},
+	pages={111--116},
+	year={2018},
+	organization={ACM}
+}
+
+@article{Edge_LBP,
+	title={Fog Computing-Based Face Identification and Resolution Scheme in Internet of Things},
+	author={Hu, Pengfei and Ning, Huansheng and Qiu, Tie and Zhang, Yanfei and Luo, Xiong},
+	journal={IEEE Transactions on Industrial Informatics},
+	volume={13},
+	number={4},
+	pages={1910 -- 1920},
+	year={2017},
+}
+@CONFERENCE{Neurosurgeon,
+	author = {Y. Kang and J. Hauswald and C. Gao and A. Rovinski and T. Mudge and J.Mars and L. Tang},
+	title = {Neurosurgeon: collaborative intelligence between the cloud and mobile edge},
+	booktitle = {ASPLOS},
+	year = {2017},
+	organization = {ACM},
+	pages = {615--629}
+}
+
+@inproceedings{jalad,
+	author    = {Hongshan Li and
+	Chenghao Hu and
+	Jingyan Jiang and
+	Zhi Wang and
+	Yonggang Wen and
+	Wenwu Zhu},
+	title     = {{JALAD:} Joint Accuracy-And Latency-Aware Deep Structure Decoupling
+	for Edge-Cloud Execution},
+	booktitle = {24th {IEEE} International Conference on Parallel and Distributed Systems,
+	{ICPADS} 2018, Singapore, December 11-13, 2018},
+	pages     = {671--678},
+	year      = {2018},
+	url       = {https://doi.org/10.1109/PADSW.2018.8645013},
+	doi       = {10.1109/PADSW.2018.8645013},
+	timestamp = {Tue, 26 Feb 2019 16:36:22 +0100},
+	biburl    = {https://dblp.org/rec/bib/conf/icpads/LiHJWWZ18},
+	bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{delac2005effects,
+	title={Effects of JPEG and JPEG2000 compression on face recognition},
+	author={Delac, Kresimir and Grgic, Mislav and Grgic, Sonja},
+	booktitle={International Conference on Pattern Recognition and Image Analysis},
+	pages={136--145},
+	year={2005},
+	organization={Springer}
+}
+
+@inproceedings{dodge2016understanding,
+	title={Understanding how image quality affects deep neural networks},
+	author={Dodge, Samuel and Karam, Lina},
+	booktitle={2016 eighth international conference on quality of multimedia experience (QoMEX)},
+	pages={1--6},
+	year={2016},
+	organization={IEEE}
+}
+
+@article{baluja2019task,
+	title={Task-specific color spaces and compression for machine-based object recognition},
+	author={Baluja, Shumeet and Marwood, David and Johnston, Nicholas},
+	journal={Technical Disclosure Commons, (March 21, 2019)},
+	year={2019}
+}
+
+@inproceedings{mascher2007comparison,
+	title={Comparison of compression algorithms' impact on fingerprint and face recognition accuracy},
+	author={Mascher-Kampfer, A and St{\"o}gner, Herbert and Uhl, Andreas},
+	booktitle={Visual Communications and Image Processing 2007},
+	volume={6508},
+	pages={650810},
+	year={2007},
+	organization={International Society for Optics and Photonics}
+}
+
+@inproceedings{gueguen2018faster,
+	title={Faster neural networks straight from JPEG},
+	author={Gueguen, Lionel and Sergeev, Alex and Kadlec, Ben and Liu, Rosanne and Yosinski, Jason},
+	booktitle={Advances in Neural Information Processing Systems},
+	pages={3933--3944},
+	year={2018}
+}
+
+@article{torfason2018towards,
+	title={Towards image understanding from deep compression without decoding},
+	author={Torfason, Robert and Mentzer, Fabian and Agustsson, Eirikur and Tschannen, Michael and Timofte, Radu and Van Gool, Luc},
+	journal={arXiv preprint arXiv:1803.06131},
+	year={2018}
+}
+
+@inproceedings{huynh2017deepmon,
+	title={Deepmon: Mobile gpu-based deep learning framework for continuous vision applications},
+	author={Huynh, Loc N and Lee, Youngki and Balan, Rajesh Krishna},
+	booktitle={Proceedings of the 15th Annual International Conference on Mobile Systems, Applications, and Services},
+	pages={82--95},
+	year={2017},
+	organization={ACM}
+}
+
+
+@incollection{agrawal2015cloudcv,
+	title={Cloudcv: Large-scale distributed computer vision as a cloud service},
+	author={Agrawal, Harsh and Mathialagan, Clint Solomon and Goyal, Yash and Chavali, Neelima and Banik, Prakriti and Mohapatra, Akrit and Osman, Ahmed and Batra, Dhruv},
+	booktitle={Mobile cloud visual media computing},
+	pages={265--290},
+	year={2015},
+	publisher={Springer}
+}
+
+@article{yuan2019adversarial,
+	title={Adversarial examples: Attacks and defenses for deep learning},
+	author={Yuan, Xiaoyong and He, Pan and Zhu, Qile and Li, Xiaolin},
+	journal={IEEE transactions on neural networks and learning systems},
+	year={2019},
+	publisher={IEEE}
+}
+
+@inproceedings{finetunning,
+	title={Borrowing treasures from the wealthy: Deep transfer learning through selective joint fine-tuning},
+	author={Ge, Weifeng and Yu, Yizhou},
+	booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+	pages={1086--1095},
+	year={2017}
+}
+
+@article{finetunning2,
+	title={Improving language understanding by generative pre-training},
+	author={Radford, Alec and Narasimhan, Karthik and Salimans, Tim and Sutskever, Ilya},
+	journal={URL https://s3-us-west-2. amazonaws. com/openai-assets/research-covers/languageunsupervised/language understanding paper. pdf},
+	year={2018}
+}
+
+@article{satyanarayanan2017emergence,
+	title={The emergence of edge computing},
+	author={Satyanarayanan, Mahadev},
+	journal={Computer},
+	volume={50},
+	number={1},
+	pages={30--39},
+	year={2017},
+	publisher={IEEE}
+}
+
+@article{hu2015mobile,
+	title={Mobile edge computing - A key technology towards 5G},
+	author={Hu, Yun Chao and Patel, Milan and Sabella, Dario and Sprecher, Nurit and Young, Valerie},
+	journal={ETSI white paper},
+	volume={11},
+	number={11},
+	pages={1--16},
+	year={2015}
+}
+
+@inproceedings{evtimov2018robust,
+	title={Robust physical-world attacks on deep learning models},
+	author={Evtimov, Ivan and Eykholt, Kevin and Fernandes, Earlence and Kohno, Tadayoshi and Li, Bo and Prakash, Atul and Rahmati, Amir and Song, Dawn},
+	booktitle={Computer Vision and Pattern Recognition},
+	year={2018}
+}
+
+@inproceedings{mcdnn,
+	title={Mcdnn: An approximation-based execution framework for deep stream processing under resource constraints},
+	author={Han, Seungyeop and Shen, Haichen and Philipose, Matthai and Agarwal, Sharad and Wolman, Alec and Krishnamurthy, Arvind},
+	booktitle={Proceedings of the 14th Annual International Conference on Mobile Systems, Applications, and Services},
+	pages={123--136},
+	year={2016},
+	organization={ACM}
+}
+
+@article{vgg19,
+	title={Very deep convolutional networks for large-scale image recognition},
+	author={Simonyan, Karen and Zisserman, Andrew},
+	journal={arXiv preprint arXiv:1409.1556},
+	year={2014}
+}
+
+%%% compression community
+
+@inproceedings{toderici2017full,
+	title={Full resolution image compression with recurrent neural networks},
+	author={Toderici, George and Vincent, Damien and Johnston, Nick and Jin Hwang, Sung and Minnen, David and Shor, Joel and Covell, Michele},
+	booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+	pages={5306--5314},
+	year={2017}
+}
+
+@article{theis2017lossy,
+	title={Lossy image compression with compressive autoencoders},
+	author={Theis, Lucas and Shi, Wenzhe and Cunningham, Andrew and Husz{\'a}r, Ferenc},
+	journal={arXiv preprint arXiv:1703.00395},
+	year={2017}
+}
+
+@article{toderici2015variable,
+	title={Variable rate image compression with recurrent neural networks},
+	author={Toderici, George and O'Malley, Sean M and Hwang, Sung Jin and Vincent, Damien and Minnen, David and Baluja, Shumeet and Covell, Michele and Sukthankar, Rahul},
+	journal={arXiv preprint arXiv:1511.06085},
+	year={2015}
+}
+
+@inproceedings{rippel2017real,
+	title={Real-time adaptive image compression},
+	author={Rippel, Oren and Bourdev, Lubomir},
+	booktitle={Proceedings of the 34th International Conference on Machine Learning-Volume 70},
+	pages={2922--2930},
+	year={2017},
+	organization={JMLR. org}
+}
+
+@misc{FLIR,
+	author={FLIR},
+	title={FLIR Thermal Dataset},
+	year={2018},
+	howpublished={\url{https://www.flir.com/oem/adas/adas-dataset-form/}},
+}
+
+@inproceedings{AlexNet-krizhevsky2012imagenet,
+	title={Imagenet classification with deep convolutional neural networks},
+	author={Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
+	booktitle={Advances in neural information processing systems},
+	pages={1097--1105},
+	year={2012}
+}
+
+@article{VGG-simonyan2014very,
+	title={Very deep convolutional networks for large-scale image recognition},
+	author={Simonyan, Karen and Zisserman, Andrew},
+	journal={arXiv preprint arXiv:1409.1556},
+	year={2014}
+}
+
+@inproceedings{GoogleNet-szegedy2015going,
+	title={Going deeper with convolutions},
+	author={Szegedy, Christian and Liu, Wei and Jia, Yangqing and Sermanet, Pierre and Reed, Scott and Anguelov, Dragomir and Erhan, Dumitru and Vanhoucke, Vincent and Rabinovich, Andrew},
+	booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+	pages={1--9},
+	year={2015}
+}
+
+@inproceedings{ResNet-he2016deep,
+	title={Deep residual learning for image recognition},
+	author={He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+	booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+	pages={770--778},
+	year={2016}
+}
+
+@article{2019review,
+	title={Image and video compression with neural networks: A review},
+	author={Ma, Siwei and Zhang, Xinfeng and Jia, Chuanmin and Zhao, Zhenghui and Wang, Shiqi and Wanga, Shanshe},
+	journal={IEEE Transactions on Circuits and Systems for Video Technology},
+	year={2019},
+	publisher={IEEE}
+}
+
+@inproceedings{2019adacompress,
+	title={AdaCompress: Adaptive Compression for Online Computer Vision Services},
+	author={Li, Hongshan and Guo, Yu and Wang, Zhi and Xia, Shutao and Zhu, Wenwu},
+	booktitle={Proceedings of the 27th ACM International Conference on Multimedia},
+	pages={2440--2448},
+	year={2019}
+}
+
+@article{wallace1992jpeg,
+	title={The JPEG still picture compression standard},
+	author={Wallace, Gregory K},
+	journal={IEEE transactions on consumer electronics},
+	volume={38},
+	number={1},
+	pages={xviii--xxxiv},
+	year={1992},
+	publisher={IEEE}
+}
+
+@misc{calore2010meet,
+	title={Meet WebP, Google's New Image Format. Wired},
+	author={CALORE, M},
+	year={2010}
+}
+
+@article{rabbani2002jpeg2000,
+	title={JPEG2000: Image compression fundamentals, standards and practice},
+	author={Rabbani, Majid},
+	journal={Journal of Electronic Imaging},
+	volume={11},
+	number={2},
+	pages={286},
+	year={2002},
+	publisher={International Society for Optics and Photonics}
+}
+
+@inproceedings{chao2011preserving,
+	title={Preserving SIFT features in JPEG-encoded images},
+	author={Chao, Jianshu and Steinbach, Eckehard},
+	booktitle={2011 18th IEEE International Conference on Image Processing},
+	pages={301--304},
+	year={2011},
+	organization={IEEE}
+}
+
+@article{dis199110918,
+	title={10918-1. Digital Compression and Coding of Continuous-tone Still Images (JPEG)},
+	author={DIS, ISO},
+	journal={CCITT Recommendation T},
+	volume={81},
+	pages={6},
+	year={1991}
+}
+
+@inproceedings{chao2013design,
+	title={On the design of a novel JPEG quantization table for improved feature detection performance},
+	author={Chao, Jianshu and Chen, Hu and Steinbach, Eckehard},
+	booktitle={2013 IEEE International Conference on Image Processing},
+	pages={1675--1679},
+	year={2013},
+	organization={IEEE}
+}
+
+@inproceedings{2019quannet,
+	title={Quannet: Joint Image Compression and Classification Over Channels with Limited Bandwidth},
+	author={Chamain, Lahiru D and Cheung, Sen-ching Samson and Ding, Zhi},
+	booktitle={2019 IEEE International Conference on Multimedia and Expo (ICME)},
+	pages={338--343},
+	year={2019},
+	organization={IEEE}
+}

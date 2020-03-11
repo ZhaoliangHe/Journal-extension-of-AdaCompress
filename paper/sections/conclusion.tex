@@ -1,0 +1,5 @@
+\section{Conclusion}
+\label{sec: conclusion}
+
+To reduce the upload traffic load of deep learning applications, most researchers focus on modifying the deep learning model, but this does not apply to the industry because the backend deep model is usually inaccessible for users. We present a heuristic solution using an reinforcement learning based agent to decide the proper compression quality level for each image, according to the input image and the backend service. Our experiments show that for different backend deep learning cloud services and different input image sceneries, using different quality selection strategy can significantly reduce the upload file size overhead while keeping comparable accuracy. Moreover, we design the inference-estimation-querying-retraining mechanism to cope with the input image scenery change and make a proper compression selection strategy for the current scenery. Our experiment result shows that once the scenery changes, the mechanism would either reload a pre-trained agent model or retrain a new
+agent intelligently to achieve lower upload file size overhead while maintaining the inference accuracy.
