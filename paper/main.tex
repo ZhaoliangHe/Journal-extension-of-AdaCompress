@@ -91,7 +91,8 @@
 \usepackage{tikz}
 \usepackage{booktabs}
 \usetikzlibrary{arrows, automata, shapes,snakes}
-\usepackage[latin1]{inputenc}
+% \usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{array}
 \usepackage[labelfont=bf,textfont=bf]{caption}
 %\usepackage[font=normalsize,labelfont=bf]{caption}
@@ -390,7 +391,9 @@
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
 %\title{\fontsize{25}{28} \selectfont AdaCompress: Adaptive Compression for Online Computer Vision Services}
-\title{\fontsize{20}{28} \selectfont AdaCompress: Adaptive Reinforcement Learning based Compression for Online Computer Vision Services}
+
+\title{\fontsize{20}{24} \selectfont Adaptive Compression for Online Computer Vision:\\an Edge Reinforcement Learning Approach}
+
 %
 %
 % author names and IEEE memberships
@@ -418,22 +421,14 @@
 %        Hongshan~Li,~\IEEEmembership{Member,~IEEE,}
 %        Zhi~Wang,~\IEEEmembership{Member,~IEEE}% <-this % stops a space
         
-\author{Zhaoliang~He,Hongshan~Li,Zhi~Wang,Shutao~Xia,Wenwu~Zhu% <-this % stops a space
+\author{Zhaoliang~He, Hongshan~Li, Zhi~Wang, Shutao~Xia, Wenwu~Zhu% <-this % stops a space
        
-\IEEEcompsocitemizethanks{\IEEEcompsocthanksitem Zhaoliang He is with the Department of Computer Science and Techonology, Tsinghua University, Beijing 100000, and also with the Peng Cheng Laboratory, Shenzhen 518000.\protect\\
-% note need leading \protect in front of \\ to get a newline within \thanks as
-% \\ is fragile and will error, could use \hfil\break instead.
-E-mail: hezl19@mails.tsinghua.edu.cn
-\IEEEcompsocthanksitem Hongshan Li is with the Tsinghua-Berkeley Shenzhen Institute, Tsinghua University, Shenzhen 518000.\protect\\
-E-mail: lhs17@mails.tsinghua.edu.cn
-\IEEEcompsocthanksitem Zhi Wang is with the International Graduate School at Shenzhen, Tsinghua University, Shenzhen 518000, and also with the Peng Cheng Laboratory, Shenzhen 518000.\protect\\
-E-mail: wangzhi@sz.tsinghua.edu.cn
-\IEEEcompsocthanksitem Shutao Xia is with the International Graduate School at Shenzhen, Tsinghua University, Shenzhen 518000.\protect\\
-E-mail: xiast@sz.tsinghua.edu.cn
-\IEEEcompsocthanksitem Wenwu Zhu is with the Tsinghua-Berkeley Shenzhen Institute, Tsinghua University, Shenzhen 518000, and also with the Department of Computer Science and Techonology, Tsinghua University, Beijing 100000.\protect\\
-E-mail: wwzhu@tsinghua.edu.cn
+\IEEEcompsocitemizethanks{
+\IEEEcompsocthanksitem Z.~He and W.~Zhu are with Department of Computer Science and Techonology, Tsinghua University.
+\IEEEcompsocthanksitem H.~Li is with Tsinghua-Berkeley Shenzhen Institute, Tsinghua University.
+\IEEEcompsocthanksitem Z.~Wang and S.~Xia are with Tsinghua Shenzhen International Graduate School, Tsinghua University.
 }% <-this % stops an unwanted space
-\thanks{The preliminary version of this paper has appeared in ACM MM'19 \cite{2019adacompress}}}
+\thanks{The preliminary version of this paper was published in ACM Multimedia 2019 \cite{2019adacompress}}}
 % Manuscript received April 19, 2005; revised August 26, 2015.
 
 % note the % following the last \IEEEmembership and also \thanks - 
@@ -500,7 +495,7 @@ E-mail: wwzhu@tsinghua.edu.cn
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-edge computing, reinforcement learning, data compression, online computer vision services
+Edge Computing, Reinforcement Learning, Adaptive Compression, Machine Learning Service
 \end{IEEEkeywords}}
 
 
@@ -529,7 +524,7 @@ edge computing, reinforcement learning, data compression, online computer vision
 %
 % For peerreview papers, this IEEEtran command inserts a page break and
 % creates the second title. It will be ignored for other modes.
-\IEEEpeerreviewmaketitle
+% \IEEEpeerreviewmaketitle
 
 
 \input{sections/introduction.tex}
