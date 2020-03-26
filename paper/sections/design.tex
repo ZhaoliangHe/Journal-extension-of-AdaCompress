@@ -1,7 +1,7 @@
 \section{Detailed Design}
 \label{Section: design}
 
-\begin{figure*}
+\begin{figure*}[!t]
 	%\begin{tabular}{cc}
 	\begin{minipage}{\linewidth}
 		\centerline{\includegraphics[width=0.8\linewidth]{figures/conventional-framework.pdf}}
@@ -68,23 +68,35 @@ We formulate the feature extractor's output $ \mathcal{E}(J(\mathcal{X}, c)) $ a
 Different from conventional reinforcement learning, the interactions between the agent and environment are infinite, i.e., there is no signal from the environment telling that an episode has finished. Therefore, we train the RL agent intermittently at a manual interval of $ T $ after the condition $ t \geq T_{\rm start} $ guaranteeing that there are enough transitions in the memory buffer $ \mathcal{D} $. In the training phase, the RL agent firstly takes some random trials to observe the environment's reaction and decreases the randomness when training afterward. All transitions are saved into a memory buffer $ \mathcal{D} $, and the agent learns to optimize its \emph{action} by minimizing the loss function $ L $ on a mini-batch from $ \mathcal{D} $. The training procedure would converge when the agent's randomness keeps decaying. Finally, the agent's action is based on its historical ``optimal'' experiences. The training procedure is presented in Algorithm~\ref{alg: rl-train}.
 % and we list the parameters in Section.~\ref{Section: evaluation}.
 
-\begin{algorithm}[htbp]
+\begin{algorithm}[!t]
 	\caption{Training RL agent $ \phi $ in environment $ \{\mathcal{X}, M\} $}
 	\label{alg: rl-train}
 	\begin{algorithmic}[1]
 		\STATE Initialize replay memory buffer $ \mathcal{D} $ to capacity $ N $
 		\STATE Initialize \emph{action-value function} $ Q $ with random weights $ \theta $
 		\STATE Initialize sequence $ s_1 = \mathcal{E}\big(J(x_1, c_1)\big), x_1 \in \mathcal{X} $ and $ \phi_1 = \phi(f_1) $
-		\FOR {t = 1, $ K $}
-		\STATE With probability $ \epsilon $ select a random compression level $ c_t $ otherwise select $ c_t = {\rm argmax}_cQ\Big(\phi\big(\mathcal{E}(f_t)\big), c; \theta\Big) $
-		\STATE Compress image $ x_t $ at quality $ c_t $ and upload it to the cloud-end to get result $ (\vec{y}_{\rm ref}, \vec{y}_c) $ and calculate reward $ r = R(\Delta s, \mathcal{A}_c) $
-		\STATE Set $ s_{t+1} = s_t $, generate $ c_t, x_{t+1} $ and preprocess $ \phi_{t+1} = \phi \big(\mathcal{E}(f_{t+1})\big) $
-		\STATE Store transition $ (\phi_t, c_t, r_t, \phi_{t+1}) $ in $ \mathcal{D} $
-		\IF {$ t \mod T == 0 $ and $ t \geq T_{\rm start} $}
-		\STATE Sample randomly mini-batch of transitions \\ $ (\phi_j, c_j, r_j, \phi_{j+1}) $ from memory buffer $ \mathcal{D} $
-		\STATE Set $ y_i = r_j + \gamma \max_{c'}Q(\phi_{j+1}, c'; \theta) $
+		\FOR {$t \in 1,2,\cdots, K$}
+		\STATE \textbf{1) Exploration.} With probability $\epsilon$:
+		\STATE \hspace{1em} $c_t \leftarrow$ a random valid value 
+		\STATE Otherwise:
+		\STATE \hspace{1em} $ c_t \leftarrow {\rm argmax}_cQ\Big(\phi\big(\mathcal{E}(f_t)\big), c; \theta\Big) $
+
+		\STATE
+		
+		\STATE \textbf{2) Reward calcuation.} 
+		\STATE Compress image $ x_t $ at quality $ c_t $ to upload
+		\STATE Receive $ (\vec{y}_{\rm ref}, \vec{y}_c) $ from the cloud service
+		\STATE $ r \leftarrow R(\Delta s, \mathcal{A}_c) $
+		
+		\STATE 
+		\STATE \textbf{3) Gradient decent.} Generate $ c_t, x_{t+1} $
+		\STATE $ s_{t+1} \leftarrow s_t $, $ \phi_{t+1} \leftarrow \phi \big(\mathcal{E}(f_{t+1})\big) $
+		\STATE $ \mathcal{D} \leftarrow \mathcal{D} \bigcup \{(\phi_t, c_t, r_t, \phi_{t+1}) \} $
+		\IF {$ t \mod T = 0 $ and $ t \geq T_{\rm start} $}
+		\STATE Sample a randomly mini-batch of transitions \\ $ (\phi_j, c_j, r_j, \phi_{j+1}) $ from memory buffer $ \mathcal{D} $
+		\STATE $ y_i \leftarrow r_j + \gamma \max_{c'}Q(\phi_{j+1}, c'; \theta) $
 		\STATE Compute decay exploration rate \\
-		$ \epsilon = 
+		$ \epsilon \leftarrow 
 		\begin{cases}
 		\mu_{\rm dec}\cdot \epsilon & \text{ if } \ \mu_{\rm dec}\cdot \epsilon > \epsilon_{\min} \\ 
 		\epsilon_{\min}             & \text{ if } \ \mu_{\rm dec}\cdot \epsilon \leq \epsilon_{\min}
@@ -109,7 +121,7 @@ As a running system, we introduce an \emph{inference-estimation-querying-retrain
 %    \label{fig: diagram}
 %\end{figure}
 
-\begin{figure*}[htbp]
+\begin{figure*}[!t]
 	\centerline{\includegraphics[width=0.8\linewidth]{figures/overall-diagram.pdf}}
 	\vspace{0.2cm}
 	\caption{Diagram of AdaCompress architecture}
@@ -145,7 +157,7 @@ The \emph{inference-estimation-querying-retraining} mechanism has four states, i
 %    \label{fig: state-switching}
 %    %\vspace{-0.8cm}
 %\end{figure}
-\begin{figure}[htbp]
+\begin{figure}[!t]
 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.1cm, semithick]
 	\tikzstyle{every state}=[ellipse, align=center, draw=blue, text=black]
 	
@@ -220,7 +232,7 @@ In the inference phase, the pre-trained RL agent chooses a proper compression qu
 
 In our experiment, we find that in different cloud-based application environments, the agent's chosen compression quality levels can be quite different. As shown in Figure~\ref{fig: quality_chosen}, for Face++ and Amazon Rekognition, the agent's choices are concentrated at around $ c=15 $, but for Baidu Vision, the agent's selections are distributed more evenly. The ``optimal'' compression strategies are different for different backend cloud services. This variation is caused by the interaction between the agent and the backend cloud model in the training phase. Since the agent's training procedure is based on a specific backend cloud model $ M_1 $, for another backend cloud model $ M_2 $, the interaction between the agent and $ M_2 $ is quite different. Therefore the agent's best compression quality level selection presents variation for different backend cloud models.  
 
-\begin{figure}[htbp]
+\begin{figure}[!t]
 	\includegraphics[width=\linewidth]{figures/quality_chosen.pdf}
 	\caption{Histogram of RL agent's best compression quality level selection for different cloud services}
 	\label{fig: quality_chosen}
@@ -235,7 +247,7 @@ Moreover, in our experiment, the agent presents different behaviors when the inp
 %    \label{fig: dataset_change}
 %\end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[!t]
 	\includegraphics[width=\linewidth]{figures/dataset_change.pdf}
 	\caption{Histogram of RL agent's best compression quality level selection for different input image ``sceneries''}
 	\label{fig: dataset_change}
@@ -247,7 +259,7 @@ Moreover, in our experiment, the agent presents different behaviors when the inp
 
 To make insight investigations, we plot the importance map of a chosen compression quality level. We leverage a conventional visualization algorithm, Grad-Cam, to observe the Deep Q-Learning Network-based agent's interest when choosing compression quality levels. Grad-Cam is a widely used effective solution to present the importance map of a deep neural network by calculating the gradients of each target concept and backtracking to the final convolution layer. In this work, we plot the RL agent's attention map by Grad-Cam in Figure~\ref{fig: attention}. %% \\
 
-\begin{figure*}[htbp]
+\begin{figure*}[!t]
 	\begin{minipage}{0.2\linewidth}
 		\centerline{\includegraphics[width=4.0cm, height=3.0cm]{figures/robust_figure1.png}}
 		\centerline{(1a) Q=5}

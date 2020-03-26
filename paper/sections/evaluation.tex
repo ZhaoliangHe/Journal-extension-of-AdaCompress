@@ -7,7 +7,7 @@ In this section, we present AdaCompress's behaviors and effectiveness by some re
 
 We carry out real-world experiments to verify our solution's performance. We use a desktop PC with an NVIDIA 1080ti graphic card as the edge infrastructure. For the cloud-based deep learning services, we choose Baidu Vision, Face++ object detection services and Amazon Rekognition. In the experiments, we use two datasets mentioned before in Subsection.~\ref{subsec:insight}. The ImageNet dataset indicates daytime scenery, and the FLIR Thermal Dataset indicates nighttime scenery. Some important hyperparameters in our experiments are given in Table ~\ref{tab: parameters}.
 
-\begin{table}[htbp]
+\begin{table}[!t]
 	\centering
 	%     \begin{tabular}{llllll}
 	\begin{tabular}{cccccc}
@@ -33,13 +33,13 @@ We use the ImageNet dataset in size reduction and accuracy performance experimen
 \subsection{Metrics}
 \label{subsec:metrics}
 
-The default compression quality level for JPEG is usually 75~\cite{pillow_benchmark,imgmin}. Therefore we regard this as a reference value $ c_{\rm ref} = 75 $ of the conventional benchmark. %% \\
+The default compression quality level for JPEG is usually $75$ \cite{pillow_benchmark,imgmin}. Therefore we regard this as a reference value $ c_{\rm ref} = 75 $ of the conventional benchmark.
 
 In our experiments, we measure the compressed and reference image's file size to obtain the compression rate $ \Delta s $. Since we do not have the real ground truth label of an image, we use the output $ \vec{y}_{\rm ref} $ from a reference image as the ground truth label, and calculate the relative top-5 accuracy $ \mathcal{A} $ as the accuracy metric. The formula of $ \mathcal{A} $ is presented in Subsection.~\ref{subsec: formulation}.
 
 \subsection{Upload Image Size Overhead}
 
-\begin{figure}[htbp]
+\begin{figure}[!t]
 	\includegraphics[width=\linewidth]{figures/train_steps_new.pdf}
 	\caption{Size overhead in the training and inference phase}
 	\label{fig: train_steps}
@@ -50,7 +50,7 @@ Figure~\ref{fig: train_steps} presents the upload traffic load of the training a
 
 \subsection{Size Reduction and Accuracy Performance}
 
-\begin{figure}[htbp]
+\begin{figure}[!t]
 	\includegraphics[width=\linewidth]{figures/compress-performance.pdf}
 	\caption{Average size and relative accuracy on different cloud services}
 	\label{fig: compress_performance}
@@ -61,7 +61,7 @@ Figure~\ref{fig: compress_performance} presents the compression performance in t
 
 \subsection{DeepN-JPEG Comparative Experiment}
 
-\begin{figure}[htbp]
+\begin{figure}[!t]
 	\includegraphics[width=\linewidth]{figures/compare_DeepN.pdf}
 	\caption{Comparative compression performance between DeepN-JPEG and AdaCompress}
 	\label{fig: compare_DeepN}
@@ -70,7 +70,7 @@ Figure~\ref{fig: compress_performance} presents the compression performance in t
 
 Figure~\ref{fig: compare_DeepN} presents a comparison performance between DeepN-JPEG and AdaCompress for each cloud service. As we can see, both DeepN-JPEG and AdaCompress cut down the upload size overhead more than 1/2. However, for all tested cloud services, AdaCompress's accuracy is higher than DeepN-JPEG's slightly. Compared with DeepN-JPEG's average accuracy is about 85\% on three cloud services, AdaCompress achieves a better average accuracy of 93\%. In a word, comparing to the DeepN-JPEG framework, AdaCompress presents a similar size reduction performance but achieving higher inference accuracy for online computer vision-based services.
 
-\begin{figure*}[htbp]
+\begin{figure*}[!t]
 	\begin{minipage}{0.3\linewidth}
 		\centerline{\includegraphics[width=4.0cm,trim=0 80 0 100,clip ]{figures/parrot_q75.jpeg}}
 		\centerline{(1a) Origin Image (Q=75)}
@@ -139,13 +139,13 @@ To evaluate the efficiency of the \emph{inference-estimation-querying-retraining
 We illustrate AdaCompress's behaviors in Figure~\ref{fig: running-retrain}. The $ x $-axis indicates steps, and the reference line indicates the scenery change. We plot AdaCompress's overall accuracy and the estimation probability $ p_{\rm est} $. At the bottom of Figure~\ref{fig: running-retrain}, we also plot the scaled upload size of AdaCompress and benchmark solution to illustrate the upload size overhead.
 %with a $ \Delta $ mark on $ x $-axis
 
-%\begin{figure}[htbp]
+%\begin{figure}[!t]
 %    \includegraphics[width=\linewidth]{figures/running-retrain.pdf}
 %    \caption{AdaCompress's reaction upon scenery change}
 %%    \vspace{-0.2cm}
 %    \label{fig: running-retrain}
 %\end{figure}
-\begin{figure}[H]
+\begin{figure}[!t]
 	\includegraphics[width=\linewidth]{figures/running-retrain.pdf}
 	\caption{AdaCompress's reactions upon scenery change}
 	%    \vspace{-0.2cm}
@@ -166,7 +166,7 @@ Comparing to the conventional solution that uploads the image directly, in our s
 
 We compute compressed file size for batches of images, and test the RL agent's inference time and the latency of uploading such compressed images. We test the average inference latency on 1000 ImageNet images and simulate the network bandwidth as 27.64 Mbps according to the global average fixed broadband upload speed~\cite{speedtest} in Feb. 2019, to verify the end-to-end latency performance. The latency comparison is listed in Table~\ref{tab: latency-overhead}. %% \\
 
-\begin{table}[htbp]
+\begin{table}[!t]
 	% \begin{table}[H]
 	\centering
 	%     \begin{tabular}{lll}
