@@ -20,7 +20,7 @@
 		\end{center}
 	\end{minipage}
 	%\end{tabular}
-	\vspace{0.1cm}
+	%\vspace{0.1cm}
 	\caption{Comparing to the conventional solution, our solution can update the compression strategy based on the backend model feedback}
 	\label{fig: framework}
 \end{figure*}
@@ -121,12 +121,19 @@ As a running system, we introduce an \emph{inference-estimation-querying-retrain
 %    \label{fig: diagram}
 %\end{figure}
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
 	\centerline{\includegraphics[width=0.8\linewidth]{figures/overall-diagram.pdf}}
-	\vspace{0.2cm}
+%	\vspace{0.2cm}
 	\caption{Diagram of AdaCompress architecture}
 	\label{fig: diagram}
-\end{figure*}
+\end{figure}
+
+%\begin{figure}[H]
+%	\centerline{\includegraphics[width=0.8\linewidth]{figures/overall-diagram.pdf}}
+%	\vspace{0.2cm}
+%	\caption{Diagram of AdaCompress architecture}
+%	\label{fig: diagram}
+%\end{figure}
 
 %% The system diagram is shown in Figure~\ref{fig: diagram}.
 We build up the memory buffer $ \mathcal{D} $ and reinforcement learning training kernel based on the compression and upload driver. When the RL training kernel is called, it would load transitions from the memory buffer $ \mathcal{D} $ to train the compression quality level predictor $ \phi $. When the system is deployed, the pre-trained RL agent $ \phi $ guides the compression driver to compress the input image at an adaptive compression quality level $ c $, then uploads the compressed image to cloud-end. %% \\
@@ -186,12 +193,12 @@ The \emph{inference-estimation-querying-retraining} mechanism has four states, i
 \end{figure}
 
 %\subsubsection{\textbf{Inference}}
-\subsubsection{Inference}
+\subsubsection{Inference:}
 
 Most of the time, AdaCompress runs in this state. In this state, only the compressed images are uploaded to the cloud-end to achieve less upload image size overhead. To keep a stable accuracy performance even the input image scenery changes, the agent would occasionally switch to the estimation state with probability $ p_{\rm est} $ since the estimator uploads the reference image to maintain inference accuracy, or remain in the inference state with probability $ 1 - p_{\rm est} $. %% \\
 
 %\subsubsection{\textbf{Estimation}}
-\subsubsection{Estimation}
+\subsubsection{Estimation:}
 
 In this state, the reference image $ x_{\rm ref} $ and compressed image $ x_i $ are uploaded to the cloud-end simultaneously to obtain $ \vec{y}_{\rm ref} $ and $ \vec{y}_i $ which are used to calculate $ \mathcal{A}_i $. In each epoch $ i $, the transition $ (\phi_i, c_i, r_i, \mathcal{A}_i) $ is logged in the memory buffer $ \mathcal{D} $. When the average accuracy $ \bar{\mathcal{A}}_n $ of the latest $ n $ steps is higher than the accuracy threshold $ \mathcal{A}_0 $, the agent would stay in the estimation state with probability $ p_{\rm est} $ or switch to the inference state with probability $ 1 - p_{\rm est} $. Once the average accuracy $ \bar{\mathcal{A}}_n $ is lower than the initial accuracy threshold $ \mathcal{A}_0 $, indicating that the current agent is no more suitable for the current input image scenery, AdaCompress would turn into the model querying state and re-load a new RL agent model from the model caching library. %% \\
 
@@ -210,7 +217,7 @@ To achieve trade-off between the risk of the scenery change and the objective of
 With this definition, an intuitive formulation of the change of $ p_{\rm est} $ is in inverse proportion of the gradient of $ \mathcal{A} $, meaning that when the recent accuracy decreases, the estimation probability $ p_{\rm est} $ would increase. We define that $ p'_{\rm est} = p_{\rm est} + \omega \nabla \bar{\mathcal{A}} $ where $ \omega $ is a scaling factor. With this recursive formula, we have the general term of $p_{\rm est} = p_0 + \omega \sum_{i=0}^{N} \nabla \bar{\mathcal{A}_i} $ where $ p_0 $ is an initial estimation probability.
 
 %\subsubsection{\textbf{Model Querying}}
-\subsubsection{Model Querying}
+\subsubsection{Model Querying:}
 
 The model querying state is designed to cope with the scenery change before re-training. It re-loads a new RL agent model from the model caching library and tests whether the loaded agent model is suitable for the current scenery by re-calculating the average accuracy. If the new average accuracy $ \bar{\mathcal{A}}^*_n $ is higher than the accuracy threshold $ \mathcal{A}_0 $, indicating that the loaded agent model is suitable for the current scenery, AdaCompress would switch to the normal inference state and use the loaded agent model to infer. Otherwise, AdaCompress would switch to the re-training state and invoke the RL training kernel to re-train a new RL agent for the current scenery.
 
@@ -218,7 +225,7 @@ In this way, AdaCompress is capable to cope with the scenery change in a cached 
 
 
 %\subsubsection{\textbf{Re-training}}
-\subsubsection{Re-training}
+\subsubsection{Re-training:}
 
 This state is to adapt the agent to the current input image scenery by re-training it with the memory buffer $ \mathcal{D} $, which is similar to the training procedure. The re-training phase has finished upon the recent $ n $ steps' average reward $ \bar{r}_n $ is higher than the user-defined threshold $ r_{\rm th} $. And when the re-training procedure finishes, the memory buffer $ \mathcal{D} $ would be flushed, preparing to save new transitions for the re-training of a next scenery change. The trained RL agent model would be cached in the model caching library and be used to switch to the inference state.
 
@@ -228,12 +235,12 @@ This state is to adapt the agent to the current input image scenery by re-traini
 In the inference phase, the pre-trained RL agent chooses a proper compression quality level according to the input image's features and the backend service. The reference image is not uploaded to the cloud-end anymore; only the compressed image is uploaded. Therefore, the upload traffic load is reduced. We notice that the RL agent's behaviors are various for different input image ``sceneries'' and backend cloud services. Therefore we try to make further investigations by plotting the RL agent's ``attention map'' (i.e., visual explanations why the agent chooses a specific compression quality level). %% \\
 
 %\subsubsection{\textbf{Compression Level Choice Variation}}
-\subsubsection{Compression Quality Level Choice Variation}
+\subsubsection{Compression Quality Level Choice Variation:}
 
 In our experiment, we find that in different cloud-based application environments, the agent's chosen compression quality levels can be quite different. As shown in Figure~\ref{fig: quality_chosen}, for Face++ and Amazon Rekognition, the agent's choices are concentrated at around $ c=15 $, but for Baidu Vision, the agent's selections are distributed more evenly. The ``optimal'' compression strategies are different for different backend cloud services. This variation is caused by the interaction between the agent and the backend cloud model in the training phase. Since the agent's training procedure is based on a specific backend cloud model $ M_1 $, for another backend cloud model $ M_2 $, the interaction between the agent and $ M_2 $ is quite different. Therefore the agent's best compression quality level selection presents variation for different backend cloud models.  
 
 \begin{figure}[!t]
-	\includegraphics[width=\linewidth]{figures/quality_chosen.pdf}
+	\includegraphics[width=0.8\linewidth]{figures/quality_chosen.pdf}
 	\caption{Histogram of RL agent's best compression quality level selection for different cloud services}
 	\label{fig: quality_chosen}
 	% \vspace{-0.3cm}
@@ -241,42 +248,42 @@ In our experiment, we find that in different cloud-based application environment
 
 Moreover, in our experiment, the agent presents different behaviors when the input image changes from one dataset to another. Figure~\ref{fig: dataset_change} shows the agent's choices for the same backend cloud model (Baidu Vision) but different image datasets. We prepare two datasets indicating two contextual ``sceneries''. We randomly sample images from ImageNet~\cite{ImageNet} whose images are mostly taken in the daytime, to act as a daytime scenery, and randomly select nighttime images from the FLIR Thermal Dataset~\cite{FLIR} to form another dataset to act as a nighttime scenery. The histogram shown in Figure~\ref{fig: dataset_change} points out that, for the ImageNet images, the agent prefers a low compression quality level, but its choices are distributed more evenly. For the FLIR Thermal images, the agent's choices are more accumulated in some relatively higher compression quality levels. We can see that, to maintain high accuracy, when the input image's contextual group $ \mathcal{X} $ changes, the agent's compression quality level selection would change as well. This phenomenon presents that the agent can adaptively choose a proper compression quality level based on the input image's features. %% \\
 
-%\begin{figure}[H]
-%    \includegraphics[width=\linewidth]{figures/dataset_change.pdf}
-%    \caption{Histogram of RL agent's best compression level selection for different scenery image inputs}
-%    \label{fig: dataset_change}
-%\end{figure}
-
 \begin{figure}[!t]
-	\includegraphics[width=\linewidth]{figures/dataset_change.pdf}
-	\caption{Histogram of RL agent's best compression quality level selection for different input image ``sceneries''}
-	\label{fig: dataset_change}
+    \includegraphics[width=0.8\linewidth]{figures/dataset_change.pdf}
+    \caption{Histogram of RL agent's best compression level selection for different scenery image inputs}
+    \label{fig: dataset_change}
 \end{figure}
 
+%\begin{figure}[!t]
+%	\includegraphics[width=\linewidth]{figures/dataset_change.pdf}
+%	\caption{Histogram of RL agent's best compression quality level selection for different input image ``sceneries''}
+%	\label{fig: dataset_change}
+%\end{figure}
+
 %\subsubsection{\textbf{Attention Map Variation}}
-\subsubsection{Attention Map Variation}
+\subsubsection{Attention Map Variation:}
 \label{subsec: attention map}
 
 To make insight investigations, we plot the importance map of a chosen compression quality level. We leverage a conventional visualization algorithm, Grad-Cam, to observe the Deep Q-Learning Network-based agent's interest when choosing compression quality levels. Grad-Cam is a widely used effective solution to present the importance map of a deep neural network by calculating the gradients of each target concept and backtracking to the final convolution layer. In this work, we plot the RL agent's attention map by Grad-Cam in Figure~\ref{fig: attention}. %% \\
 
 \begin{figure*}[!t]
 	\begin{minipage}{0.2\linewidth}
-		\centerline{\includegraphics[width=4.0cm, height=3.0cm]{figures/robust_figure1.png}}
+		\centerline{\includegraphics[width=3.5cm, height=3.0cm]{figures/robust_figure1.png}}
 		\centerline{(1a) Q=5}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.2\linewidth}
-		\centerline{\includegraphics[width=4.0cm, height=3.0cm]{figures/robust_figure2.png}}
+		\centerline{\includegraphics[width=3.5cm, height=3.0cm]{figures/robust_figure2.png}}
 		\centerline{(1b) Q=15}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.2\linewidth}
-		\centerline{\includegraphics[width=4.0cm, height=3.0cm]{figures/robust_figure3.png}}
+		\centerline{\includegraphics[width=3.5cm, height=3.0cm]{figures/robust_figure3.png}}
 		\centerline{(1c) Q=15}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.2\linewidth}
-		\centerline{\includegraphics[width=4.0cm, height=3.0cm]{figures/robust_figure4.png}}
+		\centerline{\includegraphics[width=3.5cm, height=3.0cm]{figures/robust_figure4.png}}
 		\centerline{(1d) Q=15}
 	\end{minipage}
 	
@@ -284,25 +291,25 @@ To make insight investigations, we plot the importance map of a chosen compressi
 	\vspace{0.4cm}
 	
 	\begin{minipage}{0.2\linewidth}
-		\centerline{\includegraphics[width=4.0cm, height=3.0cm]{figures/sensetive_figure1.png}}
+		\centerline{\includegraphics[width=3.5cm, height=3.0cm]{figures/sensetive_figure1.png}}
 		\centerline{(2a) Q=85}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.2\linewidth}
-		\centerline{\includegraphics[width=4.0cm, height=3.0cm]{figures/sensetive_figure2.png}}
+		\centerline{\includegraphics[width=3.5cm, height=3.0cm]{figures/sensetive_figure2.png}}
 		\centerline{(2b) Q=85}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.2\linewidth}
-		\centerline{\includegraphics[width=4.0cm, height=3.0cm]{figures/sensetive_figure3.png}}
+		\centerline{\includegraphics[width=3.5cm, height=3.0cm]{figures/sensetive_figure3.png}}
 		\centerline{(2c) Q=75}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.2\linewidth}
-		\centerline{\includegraphics[width=4.0cm, height=3.0cm]{figures/sensetive_figure4.png}}
+		\centerline{\includegraphics[width=3.5cm, height=3.0cm]{figures/sensetive_figure4.png}}
 		\centerline{(2d) Q=75}
 	\end{minipage}
-	\vspace{0.2cm}
+%	\vspace{0.2cm}
 	\caption{Visualization of the importance map for the RL agent to choose a compression quality level}
 	\label{fig: attention}
 \end{figure*}

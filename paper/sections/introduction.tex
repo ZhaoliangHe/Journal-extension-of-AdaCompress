@@ -1,7 +1,7 @@
 \section{Introduction}
 \label{Section: introduction}
 
-\IEEEPARstart{W}{ith} the great success of deep learning in computer vision, this decade has witnessed an explosion of deep learning-based computer vision-based applications. Because of the enormous computational resource consumption for deep learning applications (e.g., inferring an image on VGG19~\cite{VGG19} requires $20$ GFLOPs of GPU resource), in today's online computer vision-based applications, users usually have to upload the input images to the central cloud service providers (e.g., SenseTime, Baidu Vision and Google Vision, etc.), leading to a significant upload traffic load. 
+With the great success of deep learning in computer vision, this decade has witnessed an explosion of deep learning-based computer vision-based applications. Because of the enormous computational resource consumption for deep learning applications (e.g., inferring an image on VGG19~\cite{VGG19} requires $20$ GFLOPs of GPU resource), in today's online computer vision-based applications, users usually have to upload the input images to the central cloud service providers (e.g., SenseTime, Baidu Vision and Google Vision, etc.), leading to a significant upload traffic load. 
 
 To reduce the upload traffic load, one should compress the image before uploading it. Though JPEG has been used as the \emph{de facto} image compression and encapsulation method, its performance for the deep computer vision models is not satisfactory. Liu et al.~\cite{DeepN-JPEG} showed that by re-designing the quantization table in the default JPEG configuration, one can compress an image to a smaller version while maintaining the comparable inference accuracy for a deep computer vision model. However, such quantization solutions usually assume the inference model is fixed. 
 %To reduce the upload traffic load, it is straightforward that an image should be compressed before one uploads it.
@@ -20,52 +20,52 @@ We then raise an intuitive question: to make it practically useful, can we selec
 
 \begin{figure*}[!t]
 %	\begin{tabular}{cc}
-	\begin{minipage}{0.5\linewidth}
-		\centerline{\includegraphics[width=6.0cm, trim=0 150 0 150, clip]{figures/donut_q75.jpeg}}
+	\begin{minipage}{0.4\linewidth}
+		\centerline{\includegraphics[width=4.5cm, trim=0 150 0 150, clip]{figures/donut_q75.jpeg}}
 		\centerline{(1a) Q=75}
 %		\centerline{Face++ prediction=["donut"]}
 		\centerline{Face++ prediction \ = \ [``donut'']}
 		\vspace{0.4cm}
 	\end{minipage}
 	\hfill
-	\begin{minipage}{0.5\linewidth}
-		\centerline{\includegraphics[width=6.0cm, trim=0 150 0 150, clip]{figures/donut_q55.jpeg}}
+	\begin{minipage}{0.4\linewidth}
+		\centerline{\includegraphics[width=4.5cm, trim=0 150 0 150, clip]{figures/donut_q55.jpeg}}
 		\centerline{(1b) Q=55}
 %		\centerline{Face++ prediction=[]}
 		\centerline{Face++ prediction \ = \ [``biscuit'']}
 		\vspace{0.4cm}
 	\end{minipage}
 	\vfill	
-	\begin{minipage}{0.5\linewidth}
-		\centerline{\includegraphics[width=6.0cm, trim=0 0 0 0]{figures/chameleon_q75.jpeg}}
+	\begin{minipage}{0.4\linewidth}
+		\centerline{\includegraphics[width=4.5cm, trim=0 0 0 0]{figures/chameleon_q75.jpeg}}
 		\centerline{(2a) Q=75}
 % 		\centerline{\quad Baidu prediction=["chameleon"]}
 		\centerline{Baidu prediction \ = \ [``chameleon'']}
 		\vspace{0.4cm}
 	\end{minipage}
 	\hfill
-	\begin{minipage}{0.5\linewidth}
-		\centerline{\includegraphics[width=6.0cm, trim=0 0 0 0]{figures/chameleon_q55.jpeg}}
+	\begin{minipage}{0.4\linewidth}
+		\centerline{\includegraphics[width=4.5cm, trim=0 0 0 0]{figures/chameleon_q55.jpeg}}
 		\centerline{(2b) Q=55}
 % 		\centerline{\qquad Baidu prediction=["electric fan"]}
  		\centerline{Baidu prediction \ = \ [``electric fan'']}
  		\vspace{0.4cm}
 	\end{minipage}
 	\vfill
-	\begin{minipage}{0.5\linewidth}
-		\centerline{\includegraphics[width=6.0cm, trim=0 0 0 0, clip]{figures/tiger_highq.jpeg}}
+	\begin{minipage}{0.4\linewidth}
+		\centerline{\includegraphics[width=4.5cm, trim=0 0 0 0, clip]{figures/tiger_highq.jpeg}}
 		\centerline{(3a) Q=75}
 %		\centerline{Baidu prediction=["leopard"]}
 		\centerline{Baidu prediction \ = \ [``leopard'']}
-		\vspace{0.3cm}
+		\vspace{0.4cm}
 	\end{minipage}
 	\hfill
-	\begin{minipage}{0.5\linewidth}
-		\centerline{\includegraphics[width=6.0cm, trim=0 0 0 0, clip]{figures/tiger_lowq.jpeg}}
+	\begin{minipage}{0.4\linewidth}
+		\centerline{\includegraphics[width=4.5cm, trim=0 0 0 0, clip]{figures/tiger_lowq.jpeg}}
 		\centerline{(3b) Q=5}
 %		\centerline{Baidu prediction=["leopard"]}
 		\centerline{Baidu prediction \ = \ [``leopard'']}
-		\vspace{0.3cm}
+%		\vspace{0.4cm}
 	\end{minipage}
 %	\end{tabular}
 	\caption{The prediction of a deep learning model is not completely related to the input image's quality, making it difficult to use a fixed compression quality for all images. For image 1a, 1b and 2a, 2b, minor changes cause different predictions though they are visually similar; for image 3a and 3b, the cloud-based model still output correct label from a severely compressed image though they look very different}
