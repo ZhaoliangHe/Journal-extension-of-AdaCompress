@@ -14,15 +14,34 @@ We carry out real-world experiments to verify our solution's performance. We use
 	%     \begin{tabular}{llllll}
 	\begin{tabular}{cccccc}
 		\toprule
-		notation          & value & & & notation     & value  \\ \midrule
+		Notation          & Value & & & Notation     & Value  \\ \midrule
 		$c_{\rm ref}$ & 75    & & & $K$      & 1000   \\
 		$\epsilon_{\min}$    & 0.02  & & & $p_0$    & 0.2    \\
 		$\gamma$      & 0.95  & & & $\omega$ & -3   \\
 		$ \mu_{\rm dec} $ & 0.99 & & & $ T $ & 5  \\
-		$r_{\rm th}$  & 0.45   & & &   $ n  $  &  10      \\ \bottomrule
+		$r_{\rm th}$  & 0.45   & & &   $ n  $  &  10      \\ 
+		{\color{revise} $ \mathcal{A}_0 $} & {\color{revise}0.8} & & & {\color{revise}$ T_{\rm start} $} & {\color{revise}128} \\
+		$ {\color{revise}\alpha} $ & {\color{revise}1} & & & {\color{revise}$ \beta $} & {\color{revise}1}  \\ \bottomrule
 	\end{tabular}
-%	\vspace{-0.5cm}
+	%	\vspace{-0.5cm}
 \end{table*}
+
+%\begin{table*}[!t]
+%	\centering
+%	\caption{Experiment parameter}
+%	\label{tab: parameters}
+%	%     \begin{tabular}{llllll}
+%	\begin{tabular}{cccccc}
+%		\toprule
+%		Notation          & Value & & & Notation     & Value  \\ \midrule
+%		$c_{\rm ref}$ & 75    & & & $K$      & 1000   \\
+%		$\epsilon_{\min}$    & 0.02  & & & $p_0$    & 0.2    \\
+%		$\gamma$      & 0.95  & & & $\omega$ & -3   \\
+%		$ \mu_{\rm dec} $ & 0.99 & & & $ T $ & 5  \\
+%		$r_{\rm th}$  & 0.45   & & &   $ n  $  &  10      \\ \bottomrule
+%	\end{tabular}
+%%	\vspace{-0.5cm}
+%\end{table*}
 
 \subsection{Dataset}
 
@@ -162,25 +181,72 @@ From Figure~\ref{fig: running-retrain}, we can also observe the upload size over
 
 \subsection{End-to-End Latency Simulation}
 
-Comparing to the conventional solution that uploads the image directly, in our solution, the image is passed to the RL agent firstly to estimate the compression quality level. Running this RL agent brings extra latency to the whole system. In this subsection, we evaluate the overall latency overhead. %% \\
+Comparing to the conventional solution that uploads the image directly, in our solution, the image is passed to the RL agent firstly to estimate the compression quality level. Running this RL agent brings extra latency to the whole system. In this subsection, we evaluate the end-to-end latency. %% \\
 
-We compute compressed file size for batches of images, and test the RL agent's inference time and the latency of uploading such compressed images. We test the average inference latency on 1000 ImageNet images and simulate the network bandwidth as 27.64 Mbps according to the global average fixed broadband upload speed~\cite{speedtest} in Feb. 2019, to verify the end-to-end latency performance. The latency comparison is listed in Table~\ref{tab: latency-overhead}. %% \\
+We compute compressed file size for batches of images, and test the RL agent's inference time and the latency of uploading such compressed images. \textcolor{revise}{We respectively test the average inference latency on 1000 ImageNet images and 1000 FLIR images}, and simulate the network bandwidth as 27.64 Mbps according to the global average fixed broadband upload speed~\cite{speedtest} in Feb. 2019, to verify the end-to-end latency performance. The latency comparison is listed in Table~\ref{tab: latency-overhead}. %% \\
 
+%We compute compressed file size for batches of images, and test the RL agent's inference time and the latency of uploading such compressed images. We test the average inference latency on 1000 ImageNet images and simulate the network bandwidth as 27.64 Mbps according to the global average fixed broadband upload speed~\cite{speedtest} in Feb. 2019, to verify the end-to-end latency performance. The latency comparison is listed in Table~\ref{tab: latency-overhead}. %% \\
 
 \begin{table*}[!t]
+{\color{revise}
 	\centering
-	\caption{Latency between image upload and inference result feedback}
+	\caption{\textcolor{revise}{Latency of edge device to cloud service}}
 	\label{tab: latency-overhead}
 	%     \begin{tabular}{lll}
-	\begin{tabular}{ccc}
+	\resizebox{\textwidth}{!}{
+	\begin{tabular}{cccccc}
 		\toprule
-		& Benchmark & AdaCompress  \\ \midrule
-		Average upload size          & 42.68 KB  &  18.46 KB            \\
-		Inference latency    & 0 s       & 2.09 ms          \\
-		Transmission latency & 12.35 ms       & 5.34 ms          \\
-		Overall latency      & 12.35 ms       & 7.43 ms          \\ \bottomrule
-	\end{tabular}
+		Dataset & Solution & Average upload size & Inference latency \
+		& Transmission latency & End-to-end latency \\ \midrule
+		ImageNet & Benchmark & 42.68 KB & 0 ms & 12.35 ms & 12.35 ms \\
+		ImageNet & AdaCompress & 18.64 KB & 2.09 ms & 5.34 ms & 7.43 ms \\
+		FLIR & Benchmark & 44.66 KB & 0 ms & 12.93 ms & 12.93 ms \\
+ 		FLIR & AdaCompress & 17.07 KB & 2.03 ms & 4.94 ms & 6.97 ms \\ \bottomrule
+	\end{tabular}}
 	% \vspace{-0.5cm}
+}
 \end{table*}
+%\begin{table*}[!t]
+%	\centering
+%	\caption{Latency between image upload and inference result feedback}
+%	\label{tab: latency-overhead}
+%	%     \begin{tabular}{lll}
+%	\begin{tabular}{ccc}
+%		\toprule
+%		& Benchmark & AdaCompress  \\ \midrule
+%		Average upload size          & 42.68 KB  &  18.46 KB            \\
+%		Inference latency    & 0 s       & 2.09 ms          \\
+%		Transmission latency & 12.35 ms       & 5.34 ms          \\
+%		Overall latency      & 12.35 ms       & 7.43 ms          \\ \bottomrule
+%	\end{tabular}
+%	% \vspace{-0.5cm}
+%\end{table*}
 
-Our solution brings in inference latency to the end-to-end latency, but the transmission latency is low by reducing the upload file size. In today's network architecture where the edge infrastructure's computational power is increasing significantly ~\cite{satyanarayanan2017emergence,hu2015mobile}, we can use the computing power of the edge infrastructure in exchange for the reduction of upload traffic load and transmission latency. %% \\
+Our solution brings in inference latency to the end-to-end latency, but the transmission latency is low by reducing the upload file size. In today's network architecture where the edge infrastructure's computational power is increasing significantly~\cite{satyanarayanan2017emergence,hu2015mobile}, we can use the computing power of the edge infrastructure in exchange for the reduction of upload traffic load and transmission latency. \textcolor{revise}{Compared with the benchmark solution, our solution effectively reduces the end-to-end latency on both ImageNet and FLIR dataset.} %% \\
+
+\subsection{\textcolor{revise}{Overall Memory and Latency Overhead}}
+
+\subsubsection{\textcolor{revise}{Memory Overhead:}}
+\textcolor{revise}{The memory overhead is divided into two parts: the static occupied memory space and dynamic memory usage. Firstly, the static occupied memory space is the memory of the model's size. We use Keras to construct and save MobileNetV2 and the RL agent. We check file size of the saved model as the model's size. A RL agent model's size is 1 MB, and the feature extractor MobileNetV2's size is 8.9 MB. The model caching library stores the most recent five RL agents. The overall memory of the model's size is at most 13.9 MB. Secondly, the dynamic memory usage is the memory usage during AdaCompress runs. The overall memory usage mainly includes the memory buffer of transitions and the memory usage caused by the RL agent and feature extractor. When caching transitions of 1000 images in the memory buffer, it occupies about 500 KB. We use Psutil to measure the peak memory usage during AdaCompress runs. The peak memory usage is about 367 MB. Thirdly, in real-world edge-application scenarios, common edge infrastructures have enough memory to deploy this algorithm, such as Raspberry Pi 4 Model B's \cite{Raspberry-Pi} memory is 2/4/8 GB, and Huawei Atlas 500 edge station's memory is 4/8 GB.}
+
+\subsubsection{\textcolor{revise}{Training and Re-loading Latency:}}
+\textcolor{revise}{Although AdaCompress can be highly efficient to run on today's edge infrastructures, it would cause extra latency overhead, such as training and re-loading latency. In this subsection, we evaluate the latency overhead.}
+
+%\begin{table*}[!t]
+%	\centering
+%	\caption{Time cost of training}
+%	\label{tab: training-time}
+%		\begin{tabular}{cccc}
+%			\toprule
+%			Dataset & Number of training images & Time cost & Real time cost \\ \midrule
+%			ImageNet & 898 & 15.86 min & 7.89 min \\
+%			FLIR & 910 & 15.63 min & 7.85 min \\ \bottomrule
+%	\end{tabular}
+%	% \vspace{-0.5cm}
+%\end{table*}
+
+\textcolor{revise}{In our experiments, the convergence condition of training is that the recent average accuracy over 0.8 meanwhile the recent average reward over 0.45. The experiment results show the number of training images is respectively 898 and 910 on ImageNet and FLIR. The time cost mainly depends on the frequency of sending images and the inference speed of the cloud service. If the end-user sends images continuously, and cloud service's inference speed is about 10 images per second, the time costs are respectively about 197.3s and 200.8s on ImageNet and FLIR. In the training phase, we need to upload reference images and compressed images. We consider the time cost of uploading reference images and obtaining the feedbacks as the benchmark latency. If we minus this benchmark latency, the real training time cost is not over 100s. It is worth to spend such upload size overhead and time cost at the beginning when we need to infer thousands of images.}   
+
+%And the training time respectively is 15.36 min and 15.63 min on ImageNet and FLIR.
+
+\textcolor{revise}{The \emph{inference-estimation-querying-retraining} mechanism would either re-load or re-train a RL agent intelligently when capturing the scenery change. The re-training time cost is similar to the training time cost which is described above. The latency of re-loading a RL agent model is about 1.85s. To \emph{erase} this latency, we use another process to re-load the model in our experiments. The mechanism still uses the old RL agent to choose a compression quality level before the re-loading process has finished.}

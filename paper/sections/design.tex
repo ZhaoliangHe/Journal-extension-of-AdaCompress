@@ -76,32 +76,41 @@ Different from conventional reinforcement learning, the interactions between the
 		\STATE Initialize \emph{action-value function} $ Q $ with random weights $ \theta $
 		\STATE Initialize sequence $ s_1 = \mathcal{E}\big(J(x_1, c_1)\big), x_1 \in \mathcal{X} $ and $ \phi_1 = \phi(f_1) $
 		\FOR {$t \in 1,2,\cdots, K$}
-		\STATE \textbf{1) Exploration.} With probability $\epsilon$:
+%		\STATE \textbf{1) Exploration.} %With probability $\epsilon$:
+		{\color{revise}\STATE \textbf{1) Exploration}}
+		{\color{revise}\STATE With probability $\epsilon$:}
 		\STATE \hspace{1em} $c_t \leftarrow$ a random valid value 
 		\STATE Otherwise:
 		\STATE \hspace{1em} $ c_t \leftarrow {\rm argmax}_cQ\Big(\phi\big(\mathcal{E}(f_t)\big), c; \theta\Big) $
 
 		\STATE
 		
-		\STATE \textbf{2) Reward calcuation.} 
+%		\STATE \textbf{2) Reward calcuation.} 
+		{\color{revise}\STATE \textbf{2) Reward calcuation}} 
 		\STATE Compress image $ x_t $ at quality $ c_t $ to upload
 		\STATE Receive $ (\vec{y}_{\rm ref}, \vec{y}_c) $ from the cloud service
 		\STATE $ r \leftarrow R(\Delta s, \mathcal{A}_c) $
 		
 		\STATE 
-		\STATE \textbf{3) Gradient decent.} Generate $ c_t, x_{t+1} $
+%		\STATE \textbf{3) Gradient decent.} %Generate $ c_t, x_{t+1} $
+		{\color{revise}\STATE \textbf{3) Gradient decent}}
+		{\color{revise}\STATE Generate $ c_t, x_{t+1} $}
 		\STATE $ s_{t+1} \leftarrow s_t $, $ \phi_{t+1} \leftarrow \phi \big(\mathcal{E}(f_{t+1})\big) $
 		\STATE $ \mathcal{D} \leftarrow \mathcal{D} \bigcup \{(\phi_t, c_t, r_t, \phi_{t+1}) \} $
 		\IF {$ t \mod T = 0 $ and $ t \geq T_{\rm start} $}
-		\STATE Sample a randomly mini-batch of transitions \\ $ (\phi_j, c_j, r_j, \phi_{j+1}) $ from memory buffer $ \mathcal{D} $
+%		\STATE Sample a randomly mini-batch of transitions \\ $ (\phi_j, c_j, r_j, \phi_{j+1}) $ from memory buffer $ \mathcal{D} $
+		{\color{revise}
+		\STATE Sample a randomly mini-batch of transitions $ (\phi_j, c_j, r_j, \phi_{j+1}) $ from memory buffer $ \mathcal{D} $
 		\STATE $ y_i \leftarrow r_j + \gamma \max_{c'}Q(\phi_{j+1}, c'; \theta) $
-		\STATE Compute decay exploration rate \\
+		\STATE Compute decay exploration rate 
 		$ \epsilon \leftarrow 
 		\begin{cases}
 		\mu_{\rm dec}\cdot \epsilon & \text{ if } \ \mu_{\rm dec}\cdot \epsilon > \epsilon_{\min} \\ 
 		\epsilon_{\min}             & \text{ if } \ \mu_{\rm dec}\cdot \epsilon \leq \epsilon_{\min}
 		\end{cases} $
-		\STATE Perform a gradient descent step on \\ $ \big(y_j - Q(\phi_j, c_j; \theta)\big)^2 $ according to~\cite{DQN}
+		\STATE Perform a gradient descent step on $ \big(y_j - Q(\phi_j, c_j; \theta)\big)^2 $ according to~\cite{DQN}
+		}
+%		\STATE Perform a gradient descent step on \\ $ \big(y_j - Q(\phi_j, c_j; \theta)\big)^2 $ according to~\cite{DQN}
 		\ENDIF
 		\ENDFOR
 	\end{algorithmic}
@@ -109,8 +118,9 @@ Different from conventional reinforcement learning, the interactions between the
 
 \subsection{Reward Feedback Design}
 
-In our solution, the agent is trained by the reward feedback from the environment $ \{\mathcal{X}, M\} $. In the above formulation, we define compression rate $ \Delta s = \frac{s_c}{s_{\rm ref}} $ and accuracy metric $ \mathcal{A}_c $ at compression quality level $ c $. Basically, we want the agent to choose a proper compression quality level for minimizing the upload image size while remaining acceptable accuracy. Therefore the overall reward $ r $ should be in proportion to the accuracy $ \mathcal{A} $ while in inverse proportion to the compression ratio $ \Delta s $. We introduce two linear factors $ \alpha $ and $ \beta $ to form a linear combination $ r = \alpha \mathcal{A} - \Delta s + \beta $ as the \emph{reward function} $ R(\Delta s, \mathcal{A}) $. %% \\
+In our solution, the agent is trained by the reward feedback from the environment $ \{\mathcal{X}, M\} $. In the above formulation, we define compression rate $ \Delta s = \frac{s_c}{s_{\rm ref}} $ and accuracy metric $ \mathcal{A}_c $ at compression quality level $ c $. Basically, we want the agent to choose a proper compression quality level for minimizing the upload image size while remaining acceptable accuracy. \textcolor{revise}{Therefore the overall reward $ r $ should be positively correlated with the accuracy $ \mathcal{A} $ while negatively with the compression ratio $ \Delta s $.} We introduce two linear factors $ \alpha $ and $ \beta $ to form a linear combination $ r = \alpha \mathcal{A} - \Delta s + \beta $ as the \emph{reward function} $ R(\Delta s, \mathcal{A}) $. %% \\
 
+% Therefore the overall reward $ r $ should be in proportion to the accuracy $ \mathcal{A} $ while in inverse proportion to the compression ratio $ \Delta s $.
 \subsection{Inference-Estimation-Querying-Retraining Mechanism}
 
 As a running system, we introduce an \emph{inference-estimation-querying-retraining} mechanism to cope with the scenery change in the inference phase, building a system with different components to inferring, capturing the scenery change, then either re-loading or re-training the RL agent based on the performance of the cached model. The overall system diagram is illustrated in Figure~\ref{fig: diagram}.
@@ -209,12 +219,17 @@ To achieve trade-off between the risk of the scenery change and the objective of
 \begin{align*}
 \bar{\mathcal{A}_n} &=
 \begin{cases}
-\frac{1}{n}\sum_{i=N-n}^{N} \mathcal{A}_i & \text{ if } N \geq n \\ 
-\frac{1}{n}\sum_{i=1}^{n} \mathcal{A}_i & \text{ if } N < n 
+%\frac{1}{n}\sum_{i=N-n}^{N} \mathcal{A}_i & \text{ if } N \geq n \\ 
+%\frac{1}{n}\sum_{i=1}^{n} \mathcal{A}_i & \text{ if } N < n 
+{\color{revise}\frac{1}{n}\sum_{i=N-n+1}^{N} } \mathcal{A}_i & \text{ if } N \geq n \\ 
+{\color{revise}\frac{1}{N}\sum_{i=1}^{N} }\mathcal{A}_i & \text{ if } N < n 
 \end{cases}
 \end{align*}
 
-With this definition, an intuitive formulation of the change of $ p_{\rm est} $ is in inverse proportion of the gradient of $ \mathcal{A} $, meaning that when the recent accuracy decreases, the estimation probability $ p_{\rm est} $ would increase. We define that $ p'_{\rm est} = p_{\rm est} + \omega \nabla \bar{\mathcal{A}} $ where $ \omega $ is a scaling factor. With this recursive formula, we have the general term of $p_{\rm est} = p_0 + \omega \sum_{i=0}^{N} \nabla \bar{\mathcal{A}_i} $ where $ p_0 $ is an initial estimation probability.
+With this definition, \textcolor{revise}{the change of $ p_{\rm est} $ should be negatively correlated with} the gradient of $ \mathcal{A} $, meaning that when the recent accuracy decreases, the estimation probability $ p_{\rm est} $ would increase. We define that $ p'_{\rm est} = p_{\rm est} + \omega \nabla \bar{\mathcal{A}} $ where $ \omega $ is a \textcolor{revise}{negative} scaling factor. With this recursive formula, we have the general term of $p_{\rm est} = p_0 + \omega {\color{revise}\sum_{i=1}^{N}} \nabla \bar{\mathcal{A}_i} $ where $ p_0 $ is an initial estimation probability.
+
+% an intuitive formulation of % is in inverse proportion of
+% \sum_{i=0}^{N}
 
 %\subsubsection{\textbf{Model Querying}}
 \subsubsection{Model Querying:}
@@ -237,28 +252,65 @@ In the inference phase, the pre-trained RL agent chooses a proper compression qu
 %\subsubsection{\textbf{Compression Level Choice Variation}}
 \subsubsection{Compression Quality Level Choice Variation:}
 
-In our experiment, we find that in different cloud-based application environments, the agent's chosen compression quality levels can be quite different. As shown in Figure~\ref{fig: quality_chosen}, for Face++ and Amazon Rekognition, the agent's choices are concentrated at around $ c=15 $, but for Baidu Vision, the agent's selections are distributed more evenly. The ``optimal'' compression strategies are different for different backend cloud services. This variation is caused by the interaction between the agent and the backend cloud model in the training phase. Since the agent's training procedure is based on a specific backend cloud model $ M_1 $, for another backend cloud model $ M_2 $, the interaction between the agent and $ M_2 $ is quite different. Therefore the agent's best compression quality level selection presents variation for different backend cloud models.  
+\textcolor{revise}{As shown in Figure~\ref{fig: quality_chosen}, we find that in different cloud-based application environments, the agent's chosen compression quality levels can be quite different. We compute the \emph{mean} and \emph{standard deviation} of compression quality levels. The mean is respectively 33.4, 24.7 and 31.6 on Baidu Vison, Face++ and Amazon Rekognition. For Face++, the \emph{mean} of compression quality levels is lower than that for Baidu Vision. The standard deviation is respectively 22.77, 19.19 and 22.46 on Baidu Vison, Face++ and Amazon Rekognition.} The ``optimal'' compression strategies are different for different backend cloud services. This variation is caused by the interaction between the agent and the backend cloud model in the training phase. Since the agent's training procedure is based on a specific backend cloud model $ M_1 $, for another backend cloud model $ M_2 $, the interaction between the agent and $ M_2 $ is quite different. Therefore the agent's best compression quality level selection presents variation for different backend cloud models. 
 
-\begin{figure}[!t]
-	\includegraphics[width=0.8\linewidth]{figures/quality_chosen.pdf}
-	\caption{Histogram of RL agent's best compression quality level selection for different cloud services}
+%In our experiment, we find that in different cloud-based application environments, the agent's chosen compression quality levels can be quite different. As shown in Figure~\ref{fig: quality_chosen}, for Face++ and Amazon Rekognition, the agent's choices are concentrated at around $ c=15 $, but for Baidu Vision, the agent's selections are distributed more evenly.
+
+\begin{figure*}[!t]
+{\color{revise}
+	\begin{minipage}[t]{0.32\linewidth}
+		\centerline{\includegraphics[width=4.8cm]{figures/ImageNet_Baidu_choices1.pdf}}
+		\centerline{(a) Baidu Vision}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{0.32\linewidth}
+		\centerline{\includegraphics[width=4.8cm]{figures/ImageNet_Facepp_choices1.pdf}}
+		\centerline{(b) Face++}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{0.32\linewidth}
+		\centerline{\includegraphics[width=4.8cm]{figures/ImageNet_Amazon_choices1.pdf}}
+		\centerline{(c) Amazon Rekognition}
+	\end{minipage}		
+	\caption{\textcolor{revise}{Histogram of RL agent's best compression quality level selection for different cloud services}}
 	\label{fig: quality_chosen}
-	% \vspace{-0.3cm}
-\end{figure}
-
-Moreover, in our experiment, the agent presents different behaviors when the input image changes from one dataset to another. Figure~\ref{fig: dataset_change} shows the agent's choices for the same backend cloud model (Baidu Vision) but different image datasets. We prepare two datasets indicating two contextual ``sceneries''. We randomly sample images from ImageNet~\cite{ImageNet} whose images are mostly taken in the daytime, to act as a daytime scenery, and randomly select nighttime images from the FLIR Thermal Dataset~\cite{FLIR} to form another dataset to act as a nighttime scenery. The histogram shown in Figure~\ref{fig: dataset_change} points out that, for the ImageNet images, the agent prefers a low compression quality level, but its choices are distributed more evenly. For the FLIR Thermal images, the agent's choices are more accumulated in some relatively higher compression quality levels. We can see that, to maintain high accuracy, when the input image's contextual group $ \mathcal{X} $ changes, the agent's compression quality level selection would change as well. This phenomenon presents that the agent can adaptively choose a proper compression quality level based on the input image's features. %% \\
-
-\begin{figure}[!t]
-    \includegraphics[width=0.8\linewidth]{figures/dataset_change.pdf}
-    \caption{Histogram of RL agent's best compression level selection for different scenery image inputs}
-    \label{fig: dataset_change}
-\end{figure}
+}
+\end{figure*}
 
 %\begin{figure}[!t]
-%	\includegraphics[width=\linewidth]{figures/dataset_change.pdf}
-%	\caption{Histogram of RL agent's best compression quality level selection for different input image ``sceneries''}
-%	\label{fig: dataset_change}
+%	\includegraphics[width=0.8\linewidth]{figures/quality_chosen.pdf}
+%	\caption{Histogram of RL agent's best compression quality level selection for different cloud services}
+%	\label{fig: quality_chosen}
+%	% \vspace{-0.3cm}
 %\end{figure}
+
+Moreover, in our experiment, the agent presents different behaviors when the input image changes from one dataset to another. Figure~\ref{fig: dataset_change} shows the agent's choices for the same backend cloud model (Baidu Vision) but different image datasets. We prepare two datasets indicating two contextual ``sceneries''. We randomly sample images from ImageNet~\cite{ImageNet} whose images are mostly taken in the daytime, to act as a daytime scenery, and randomly select nighttime images from the FLIR Thermal Dataset~\cite{FLIR} to form another dataset to act as a nighttime scenery. \textcolor{revise}{The histogram shown in Figure~\ref{fig: dataset_change} points out that the distribution of compression quality levels is different on ImageNet and FLIR Thermal Dataset. For ImageNet and FLIR, the mean is respectively 43.3 and 47.5, and the standard deviation is respectively 19.52 and 26.56.} We can see that, to maintain high accuracy, when the input image's contextual group $ \mathcal{X} $ changes, the agent's compression quality level selection would change as well. This phenomenon presents that the agent can adaptively choose a proper compression quality level based on the input image's features. 
+
+\textcolor{revise}{We can also find that Figure~\ref{fig: quality_chosen}(a) and Figure~\ref{fig: dataset_change}(a) is different, even if we use the same cloud service (Baidu Vision) and image dataset (ImageNet). When we use the same cloud service at different times, the cloud service commonly invokes different backend cloud models. Therefore the interaction between the agent and the backend cloud model is different. This result variation presents that the agent can adaptively make a proper compression strategy in different complex environments, indicating our solution's generality and practicality.} %% \\
+
+%The histogram shown in Figure~\ref{fig: dataset_change} points out that, for the ImageNet images, the agent prefers a low compression quality level, but its choices are distributed more evenly. For the FLIR Thermal images, the agent's choices are more accumulated in some relatively higher compression quality levels.
+
+%\begin{figure}[!t]
+%    \includegraphics[width=0.8\linewidth]{figures/dataset_change.pdf}
+%    \caption{Histogram of RL agent's best compression level selection for different scenery image inputs}
+%    \label{fig: dataset_change}
+%\end{figure}
+
+\begin{figure*}[!t]
+{\color{revise}
+	\begin{minipage}[t]{0.48\linewidth}
+		\centerline{\includegraphics[width=7cm]{figures/ImageNet_Baidu_choices.pdf}}
+		\centerline{(a) ImageNet images}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{0.48\linewidth}
+		\centerline{\includegraphics[width=7cm]{figures/FLIR_Baidu_choices.pdf}}
+		\centerline{(b) FLIR images}
+	\end{minipage}	
+    \caption{\textcolor{revise}{Histogram of RL agent's best compression quality level selection for different scenery image inputs}}
+	\label{fig: dataset_change}
+}
+\end{figure*}
 
 %\subsubsection{\textbf{Attention Map Variation}}
 \subsubsection{Attention Map Variation:}
