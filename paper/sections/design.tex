@@ -42,14 +42,14 @@ Without loss of generality, we denote the cloud-based deep learning service as $
 
 Where $ j = 1,...,5 $ indicates the prediction labels at the top-5 score, meaning that if any one of the top-5 predicted labels matches the ground truth label $ \vec{y}_{\rm ref} $, it would be regarded as a correct prediction. In general, we cannot get the cloud-based deep learning model's in-layer details (e.g., softmax probabilities) for a cloud-based deep learning service. Therefore we use a binary hard label $ d(x, y) \in \{0, 1\} $ to evaluate the accuracy. %% $ d(x, y) \in \{0, 1\} $
 
-We also denote JPEG input images as $ f_{ic} = J(x_i, c) $ that for an input image $ x_i $ and a given compression quality level $ c $, and it outputs a compressed file $ f_{ic} $ at the size of $ s_{ic} $. For a reference compression quality level $ c_{\rm ref} $, the compressed file size is $ s_{\rm ref} $. Besides, the input image from a specific scenery usually belongs to a particular contextual group~\cite{mcdnn}. For example, in the daytime, the input images are expected to have a bright background, while nighttime images are usually gray-scaled thermal images. Therefore, the agent in one scenery does not need to know all the contextual features in all ``sceneries''. We formulate this as contextual group $ \mathcal{X} $.
+We also denote JPEG input images as $ f_{ic} = J(x_i, c) $ that for an input image $ x_i $ and a given compression quality level $ c $, and it outputs a compressed file $ f_{ic} $ at the size of {\color{revise2} $ \hat{s}_{ic} $}. For a reference compression quality level $ c_{\rm ref} $, the compressed file size is {\color{revise2} $ \hat{s}_{\rm ref} $}. Besides, the input image from a specific scenery usually belongs to a particular contextual group~\cite{mcdnn}. For example, in the daytime, the input images are expected to have a bright background, while nighttime images are usually gray-scaled thermal images. Therefore, the agent in one scenery does not need to know all the contextual features in all ``sceneries''. We formulate this as contextual group $ \mathcal{X} $.
 %This contextual grouping concept is also discussed in~\cite{mcdnn}.
 
-Initially, the agent tries different compression quality levels $ c_{\min} < c < c_{\max}, c \in \mathbb{N} $ to obtain compressed image $ x_c $ from input image $ x $. To obtain cloud-end recognition results $ \{\vec{y}_{\rm ref}, \vec{y}_c\} $, the agent uploads the compressed image $ x_c $ and the reference image $ x_{\rm ref} $ to the cloud-end. Comparing the two uploaded instances $ \{x_{\rm ref}, x_c\} $ and cloud-end recognition results $ \{\vec{y}_{\rm ref}, \vec{y}_c\} $, the agent obtains the reference file size $ s_{\rm ref} $ and compressed file size $ s_c $, and computes the file compression ratio $ \Delta s = \frac{s_c}{s_{\rm ref}} $ and accuracy metric $ \mathcal{A}_c $.
+Initially, the agent tries different compression quality levels $ c_{\min} < c < c_{\max}, c \in \mathbb{N} $ to obtain compressed image $ x_c $ from input image $ x $. To obtain cloud-end recognition results $ \{\vec{y}_{\rm ref}, \vec{y}_c\} $, the agent uploads the compressed image $ x_c $ and the reference image $ x_{\rm ref} $ to the cloud-end. Comparing the two uploaded instances $ \{x_{\rm ref}, x_c\} $ and cloud-end recognition results $ \{\vec{y}_{\rm ref}, \vec{y}_c\} $, the agent obtains the reference file size {\color{revise2}$ \hat{s}_{\rm ref} $} and compressed file size {\color{revise2}$ \hat{s}_c $}, and computes the file compression ratio {\color{revise2}$ \Delta s = \frac{\hat{s}_c}{\hat{s}_{\rm ref}} $} and accuracy metric $ \mathcal{A}_c $.
 
 \subsection{RL Agent Design}
 
-The RL agent is expected to give a proper compression quality level $ c $ for minimizing the file size $ s_c $ while keeping the accuracy $ \mathcal{A} $. For the RL agent, the input features are continuous numerical vectors, and the expected output is discrete compression quality level $ c $. Therefore we can use the Deep Q-learning Network as the RL agent. But the naive Deep Q-learning Network can not work well in this task because of the following challenges: %% \\
+The RL agent is expected to give a proper compression quality level $ c $ for minimizing the file size {\color{revise2}$ \hat{s}_c $} while keeping the accuracy $ \mathcal{A} $. For the RL agent, the input features are continuous numerical vectors, and the expected output is discrete compression quality level $ c $. Therefore we can use the Deep Q-learning Network as the RL agent. But the naive Deep Q-learning Network can not work well in this task because of the following challenges: %% \\
 
 \begin{itemize}
 	\item The state space of reinforcement learning is too large. To preserve enough details, we have to add many layers and nodes to the neural network, making the RL agent extremely difficult to converge. 
@@ -63,66 +63,125 @@ To address these challenges, we use the early layers of a pre-trained neural net
 
 In a specific scenery where the user input image $ x $ belongs to the contextual group $ \mathcal{X} $, we define the contextual group $ \mathcal{X} $, along with the backend cloud model $ M $, as the \emph{emulator environment} $ \{\mathcal{X}, M\} $ of the reinforcement learning problem. 
 
-We formulate the feature extractor's output $ \mathcal{E}(J(\mathcal{X}, c)) $ as \emph{states} and the compression quality level $ c $ as discrete \emph{actions}. In our system, to accelerate training, we define 10 discrete actions to indicate 10 compression quality levels of JPEG ranging from $ 5, 15, ...,95 $. We denote the \emph{action-value function} as $ Q(\phi(\mathcal{E}(f_t)), c; \theta) $ and the optimal compression quality level at time $ t $ as $ c_t = {\rm argmax}_cQ(\phi(\mathcal{E}(f_t)), c; \theta) $ where $ \theta $ indicates the parameters of the Deep Q-learning Network $ \phi $. In such reinforcement learning formulation, the training phase is to minimize the loss function $ L_i(\theta_i) = \mathbb{E}_{s, c \sim \rho (\cdot)}\Big[\big(y_i - Q(s, c; \theta_i)\big)^2 \Big] $ that changes at each iteration $ i $ where $ s = \mathcal{E}(f_t) $ and target $ y_i = \mathbb{E}_{s' \sim \{\mathcal{X}, M\}} \big[ r + \gamma \max_{c'} Q(s', c'; \theta_{i-1}) \mid s, c \big] $. Especially, $ r $ is the reward feedback, and $ \rho(s, c) $ is a probability distribution over sequences $ s $ and the compression quality level $ c $~\cite{DQN}. When minimizing the distance of \emph{action-value function}'s output $ Q(\cdot) $ and target $ y_i $, the \emph{action-value function} $ Q(\cdot) $ outputs a more accurate estimation of an action. 
+We formulate the feature extractor's output {\color{revise2} $ s = \mathcal{E}(J(\mathcal{X}, c)) $} \iffalse $ \mathcal{E}(J(\mathcal{X}, c)) $ \fi as \emph{states} and the compression quality level $ c $ as discrete \emph{actions}. In our system, to accelerate training, we define 10 discrete actions to indicate 10 compression quality levels of JPEG ranging from $ 5, 15, ...,95 $. We denote the \emph{action-value function} as {\color{revise2} $ Q(\mathcal{E}(f_t), c; \theta) $} \iffalse $ Q(\phi(\mathcal{E}(f_t)), c; \theta) $ \fi and the optimal compression quality level at time $ t $ as {\color{revise2} $  c_t = {\rm argmax}_cQ(\mathcal{E}(f_t), c; \theta) $} \iffalse $ c_t = {\rm argmax}_cQ(\phi(\mathcal{E}(f_t)), c; \theta) $ \fi where $ \theta $ indicates the parameters of the Deep Q-learning Network $ \phi $. In such reinforcement learning formulation, the training phase is to minimize the loss function $ L_i(\theta_i) = \mathbb{E}_{s, c \sim \rho (\cdot)}\Big[\big(y_i - Q(s, c; \theta_i)\big)^2 \Big] $ that changes at each iteration $ i $ where {\color{revise2} state $ s = \mathcal{E}(f_i) $} and target $ y_i = \mathbb{E}_{s' \sim \{\mathcal{X}, M\}} \big[ r + \gamma \max_{c'} Q(s', c'; \theta_{i-1}) \mid s, c \big] $. Especially, $ r $ is the reward feedback, and $ \rho(s, c) $ is a probability distribution over {\color{revise2} state} \iffalse sequences \fi $ s $ and the compression quality level $ c $~\cite{DQN}. When minimizing the distance of \emph{action-value function}'s output $ Q(\cdot) $ and target $ y_i $, the \emph{action-value function} $ Q(\cdot) $ outputs a more accurate estimation of an action. 
 
-Different from conventional reinforcement learning, the interactions between the agent and environment are infinite, i.e., there is no signal from the environment telling that an episode has finished. Therefore, we train the RL agent intermittently at a manual interval of $ T $ after the condition $ t \geq T_{\rm start} $ guaranteeing that there are enough transitions in the memory buffer $ \mathcal{D} $. In the training phase, the RL agent firstly takes some random trials to observe the environment's reaction and decreases the randomness when training afterward. All transitions are saved into a memory buffer $ \mathcal{D} $, and the agent learns to optimize its \emph{action} by minimizing the loss function $ L $ on a mini-batch from $ \mathcal{D} $. The training procedure would converge when the agent's randomness keeps decaying. Finally, the agent's action is based on its historical ``optimal'' experiences. The training procedure is presented in Algorithm~\ref{alg: rl-train}.
+Different from conventional reinforcement learning, the interactions between the agent and environment are infinite, i.e., there is no signal from the environment telling that an episode has finished. Therefore, we train the RL agent intermittently at a manual interval of $ T $ after the condition $ t \geq T_{\rm start} $ guaranteeing that there are enough transitions in the memory buffer $ \mathcal{D} $. In the training phase, the RL agent firstly takes some random trials to observe the environment's reaction and decreases the randomness when training afterward. {\color{revise2} In iteration t, we  leverage the feature extractor $\mathcal{E}$ to obtain state $s_t = \mathcal{E}(J(x_t,c_{ref}))$. The RL agent $\phi$ generates a compresion quality level $c_t$. The framework compresses image $x_t$ at quality $c_t$ to upload and obtains reward $r_t$. The framework obtains next image $x_{t+1}$ and generates next state $ s_{t+1} = \mathcal{E}\big(J(x_{t+1},c_{ref})\big) $. The framework stores transition $(s_t, c_t, r_t, s_{t+1},\mathcal{A}_t )$ in a memory buffer $\mathcal{D}$. Especially, $(s_t, c_t, r_t, s_{t+1} )$ is uesd to compute the loss function, and $(r_t,\mathcal{A}_t )$ is used in \ref{subsec: mechanism}  Inference-Estimation-Querying-Retraining Mechanism.} All transitions are saved into a memory buffer $ \mathcal{D} $, and the agent learns to optimize its \emph{action} by minimizing the loss function $ L $ on a mini-batch from $ \mathcal{D} $. The training procedure would converge when the agent's randomness keeps decaying. Finally, the agent's action is based on its historical ``optimal'' experiences. The training procedure is presented in Algorithm~\ref{alg: rl-train}.
 % and we list the parameters in Section.~\ref{Section: evaluation}.
 
+
 \begin{algorithm}[!t]
+{\color{revise2}
 	\caption{Training RL agent $ \phi $ in environment $ \{\mathcal{X}, M\} $}
 	\label{alg: rl-train}
 	\begin{algorithmic}[1]
 		\STATE Initialize replay memory buffer $ \mathcal{D} $ to capacity $ N $
 		\STATE Initialize \emph{action-value function} $ Q $ with random weights $ \theta $
-		\STATE Initialize sequence $ s_1 = \mathcal{E}\big(J(x_1, c_1)\big), x_1 \in \mathcal{X} $ and $ \phi_1 = \phi(f_1) $
+		{\color{revise2}
+		\STATE Initialize state $ s_1 \leftarrow \mathcal{E}\big(J(x_1, c_{ref})\big), x_1 \in \mathcal{X} $ }
+%		and $ \phi_1 = \phi(f_1) $
 		\FOR {$t \in 1,2,\cdots, K$}
 %		\STATE \textbf{1) Exploration.} %With probability $\epsilon$:
-		{\color{revise}\STATE \textbf{1) Exploration}}
-		{\color{revise}\STATE With probability $\epsilon$:}
+		\STATE \textbf{1) Exploration}
+		\STATE With probability $\epsilon$:
 		\STATE \hspace{1em} $c_t \leftarrow$ a random valid value 
 		\STATE Otherwise:
-		\STATE \hspace{1em} $ c_t \leftarrow {\rm argmax}_cQ\Big(\phi\big(\mathcal{E}(f_t)\big), c; \theta\Big) $
-
+		{\color{revise2}
+		\STATE \hspace{1em} $ c_t \leftarrow {\rm argmax}_cQ(\mathcal{E}(f_t), c; \theta) $ }
+%		{\rm argmax}_cQ\Big(\big(\mathcal{E}(f_t)\big), c; \theta\Big) $
 		\STATE
 		
 %		\STATE \textbf{2) Reward calcuation.} 
-		{\color{revise}\STATE \textbf{2) Reward calcuation}} 
+		\STATE \textbf{2) Reward calcuation} 
 		\STATE Compress image $ x_t $ at quality $ c_t $ to upload
 		\STATE Receive $ (\vec{y}_{\rm ref}, \vec{y}_c) $ from the cloud service
-		\STATE $ r \leftarrow R(\Delta s, \mathcal{A}_c) $
+		{\color{revise2} \STATE compute reward $ r \leftarrow R(\Delta s, \mathcal{A}_c) $ according to \ref{subsec: reward} Reward Feedback Design}
 		
 		\STATE 
 %		\STATE \textbf{3) Gradient decent.} %Generate $ c_t, x_{t+1} $
-		{\color{revise}\STATE \textbf{3) Gradient decent}}
-		{\color{revise}\STATE Generate $ c_t, x_{t+1} $}
-		\STATE $ s_{t+1} \leftarrow s_t $, $ \phi_{t+1} \leftarrow \phi \big(\mathcal{E}(f_{t+1})\big) $
-		\STATE $ \mathcal{D} \leftarrow \mathcal{D} \bigcup \{(\phi_t, c_t, r_t, \phi_{t+1}) \} $
+		\STATE \textbf{3) Gradient descent}
+		{\color{revise2}\STATE Obtain next image $ x_{t+1} $
+		\STATE Generate next state $ s_{t+1} \leftarrow \mathcal{E}\big(J(x_{t+1},c_{ref})\big) $
+%		, $ \phi_{t+1} \leftarrow \phi \big(\mathcal{E}(f_{t+1})\big) $
+%		\STATE $ s_{t+1} \leftarrow s_t $, $ \phi_{t+1} \leftarrow \phi \big(\mathcal{E}(f_{t+1})\big) $
+		\STATE $ \mathcal{D} \leftarrow \mathcal{D} \bigcup \{(s_t, c_t, r_t, s_{t+1},\mathcal{A}_t ) \} $
+%		\STATE $ \mathcal{D} \leftarrow \mathcal{D} \bigcup \{(\phi_t, c_t, r_t, \phi_{t+1}) \} $
 		\IF {$ t \mod T = 0 $ and $ t \geq T_{\rm start} $}
 %		\STATE Sample a randomly mini-batch of transitions \\ $ (\phi_j, c_j, r_j, \phi_{j+1}) $ from memory buffer $ \mathcal{D} $
-		{\color{revise}
-		\STATE Sample a randomly mini-batch of transitions $ (\phi_j, c_j, r_j, \phi_{j+1}) $ from memory buffer $ \mathcal{D} $
-		\STATE $ y_i \leftarrow r_j + \gamma \max_{c'}Q(\phi_{j+1}, c'; \theta) $
+		\STATE Sample a randomly mini-batch of transitions $ (s_j, c_j, r_j, s_{j+1},\mathcal{A}_j ) $ from memory buffer $ \mathcal{D} $
+		\STATE $ y_j \leftarrow r_j + \gamma \max_{c'}Q(s_{j+1}, c'; \theta) $
 		\STATE Compute decay exploration rate 
 		$ \epsilon \leftarrow 
 		\begin{cases}
 		\mu_{\rm dec}\cdot \epsilon & \text{ if } \ \mu_{\rm dec}\cdot \epsilon > \epsilon_{\min} \\ 
 		\epsilon_{\min}             & \text{ if } \ \mu_{\rm dec}\cdot \epsilon \leq \epsilon_{\min}
 		\end{cases} $
-		\STATE Perform a gradient descent step on $ \big(y_j - Q(\phi_j, c_j; \theta)\big)^2 $ according to~\cite{DQN}
-		}
+		\STATE Perform a gradient descent step on $ \big(y_j - Q(s_j, c_j; \theta)\big)^2 $ according to~\cite{DQN}
+		
 %		\STATE Perform a gradient descent step on \\ $ \big(y_j - Q(\phi_j, c_j; \theta)\big)^2 $ according to~\cite{DQN}
 		\ENDIF
+	    }
 		\ENDFOR
 	\end{algorithmic}
+}
 \end{algorithm}
 
-\subsection{Reward Feedback Design}
 
-In our solution, the agent is trained by the reward feedback from the environment $ \{\mathcal{X}, M\} $. In the above formulation, we define compression rate $ \Delta s = \frac{s_c}{s_{\rm ref}} $ and accuracy metric $ \mathcal{A}_c $ at compression quality level $ c $. Basically, we want the agent to choose a proper compression quality level for minimizing the upload image size while remaining acceptable accuracy. \textcolor{revise}{Therefore the overall reward $ r $ should be positively correlated with the accuracy $ \mathcal{A} $ while negatively with the compression ratio $ \Delta s $.} We introduce two linear factors $ \alpha $ and $ \beta $ to form a linear combination $ r = \alpha \mathcal{A} - \Delta s + \beta $ as the \emph{reward function} $ R(\Delta s, \mathcal{A}) $. %% \\
+%\begin{algorithm}[!t]
+%	\caption{Training RL agent $ \phi $ in environment $ \{\mathcal{X}, M\} $}
+%	\label{alg: rl-train}
+%	\begin{algorithmic}[1]
+%		\STATE Initialize replay memory buffer $ \mathcal{D} $ to capacity $ N $
+%		\STATE Initialize \emph{action-value function} $ Q $ with random weights $ \theta $
+%		\STATE Initialize sequence $ s_1 = \mathcal{E}\big(J(x_1, c_1)\big), x_1 \in \mathcal{X} $ and $ \phi_1 = \phi(f_1) $
+%		\FOR {$t \in 1,2,\cdots, K$}
+%		%		\STATE \textbf{1) Exploration.} %With probability $\epsilon$:
+%		{\color{revise}\STATE \textbf{1) Exploration}}
+%		{\color{revise}\STATE With probability $\epsilon$:}
+%		\STATE \hspace{1em} $c_t \leftarrow$ a random valid value 
+%		\STATE Otherwise:
+%		\STATE \hspace{1em} $ c_t \leftarrow {\rm argmax}_cQ\Big(\phi\big(\mathcal{E}(f_t)\big), c; \theta\Big) $
+%		
+%		\STATE
+%		
+%		%		\STATE \textbf{2) Reward calcuation.} 
+%		{\color{revise}\STATE \textbf{2) Reward calcuation}} 
+%		\STATE Compress image $ x_t $ at quality $ c_t $ to upload
+%		\STATE Receive $ (\vec{y}_{\rm ref}, \vec{y}_c) $ from the cloud service
+%		\STATE $ r \leftarrow R(\Delta s, \mathcal{A}_c) $
+%		
+%		\STATE 
+%		%		\STATE \textbf{3) Gradient decent.} %Generate $ c_t, x_{t+1} $
+%		{\color{revise}\STATE \textbf{3) Gradient decent}}
+%		{\color{revise}\STATE Generate $ c_t, x_{t+1} $}
+%		\STATE $ s_{t+1} \leftarrow s_t $, $ \phi_{t+1} \leftarrow \phi \big(\mathcal{E}(f_{t+1})\big) $
+%		\STATE $ \mathcal{D} \leftarrow \mathcal{D} \bigcup \{(\phi_t, c_t, r_t, \phi_{t+1}) \} $
+%		\IF {$ t \mod T = 0 $ and $ t \geq T_{\rm start} $}
+%		%		\STATE Sample a randomly mini-batch of transitions \\ $ (\phi_j, c_j, r_j, \phi_{j+1}) $ from memory buffer $ \mathcal{D} $
+%		{\color{revise}
+%			\STATE Sample a randomly mini-batch of transitions $ (\phi_j, c_j, r_j, \phi_{j+1}) $ from memory buffer $ \mathcal{D} $
+%			\STATE $ y_i \leftarrow r_j + \gamma \max_{c'}Q(\phi_{j+1}, c'; \theta) $
+%			\STATE Compute decay exploration rate 
+%			$ \epsilon \leftarrow 
+%			\begin{cases}
+%			\mu_{\rm dec}\cdot \epsilon & \text{ if } \ \mu_{\rm dec}\cdot \epsilon > \epsilon_{\min} \\ 
+%			\epsilon_{\min}             & \text{ if } \ \mu_{\rm dec}\cdot \epsilon \leq \epsilon_{\min}
+%			\end{cases} $
+%			\STATE Perform a gradient descent step on $ \big(y_j - Q(\phi_j, c_j; \theta)\big)^2 $ according to~\cite{DQN}
+%		}
+%		%		\STATE Perform a gradient descent step on \\ $ \big(y_j - Q(\phi_j, c_j; \theta)\big)^2 $ according to~\cite{DQN}
+%		\ENDIF
+%		\ENDFOR
+%	\end{algorithmic}
+%\end{algorithm}
+
+\subsection{Reward Feedback Design}
+\label{subsec: reward}
+
+In our solution, the agent is trained by the reward feedback from the environment $ \{\mathcal{X}, M\} $. In the above formulation, we define compression rate {\color{revise2}$ \Delta s = \frac{\hat{s}_c}{\hat{s}_{\rm ref}} $} \iffalse $ \Delta s = \frac{s_c}{s_{\rm ref}} $ \fi and accuracy metric $ \mathcal{A}_c $ at compression quality level $ c $. Basically, we want the agent to choose a proper compression quality level for minimizing the upload image size while remaining acceptable accuracy. \textcolor{revise}{Therefore the overall reward $ r $ should be positively correlated with the accuracy $ \mathcal{A} $ while negatively with the compression ratio $ \Delta s $.} We introduce two linear factors $ \alpha $ and $ \beta $ to form a linear combination $ r = \alpha \mathcal{A} - \Delta s + \beta $ as the \emph{reward function} $ R(\Delta s, \mathcal{A}) $. %% \\
 
 % Therefore the overall reward $ r $ should be in proportion to the accuracy $ \mathcal{A} $ while in inverse proportion to the compression ratio $ \Delta s $.
 \subsection{Inference-Estimation-Querying-Retraining Mechanism}
-
+\label{subsec: mechanism}
 As a running system, we introduce an \emph{inference-estimation-querying-retraining} mechanism to cope with the scenery change in the inference phase, building a system with different components to inferring, capturing the scenery change, then either re-loading or re-training the RL agent based on the performance of the cached model. The overall system diagram is illustrated in Figure~\ref{fig: diagram}.
 
 %\begin{figure}[H]
@@ -148,7 +207,7 @@ As a running system, we introduce an \emph{inference-estimation-querying-retrain
 %% The system diagram is shown in Figure~\ref{fig: diagram}.
 We build up the memory buffer $ \mathcal{D} $ and reinforcement learning training kernel based on the compression and upload driver. When the RL training kernel is called, it would load transitions from the memory buffer $ \mathcal{D} $ to train the compression quality level predictor $ \phi $. When the system is deployed, the pre-trained RL agent $ \phi $ guides the compression driver to compress the input image at an adaptive compression quality level $ c $, then uploads the compressed image to cloud-end. %% \\
 
-After the AdaCompress is deployed, the input image scenery context $ \mathcal{X} $ may change (e.g., day to night, sunny to rainy). When the scenery changes, the older RL agent's compression selection strategy may not be suitable anymore, causing the overall accuracy to decrease. To cope with the scenery change, AdaCompress invokes an estimator with a probability $ p_{\rm est} $. AdaCompress does this by generating a random value $ \xi \in (0,1) $ and comparing it to $ p_{\rm est} $. If $ \xi \leq p_{\rm est} $, the estimator would be invoked. AdaCompress would upload the reference image $ x_{\rm ref} $ along with the compressed image $ x_i $ to obtain $ \vec{y}_{\rm ref} $ and $ \vec{y}_i $, calculate $ \mathcal{A}_i $ and save the transition $ (\phi_i, c_i, r_i, \mathcal{A}_i) $ to the memory buffer $ \mathcal{D} $. The estimator also compares the recent $ n $ steps' average accuracy $ \bar{\mathcal{A}}_n $ and the initial accuracy threshold $ \mathcal{A}_0 $. Once the recent average accuracy is lower than the initial accuracy threshold, the estimator would query a RL agent model to replace the current agent model and test the performance of the loaded model. To test the loaded model's performance, the estimator computes the average accuracy $ \bar{\mathcal{A}}^*_n $. If $ \bar{\mathcal{A}}^*_n $ is still lower than the accuracy threshold, the estimator would invoke the RL training kernel to re-train the agent. Once the estimator discovers that the trained reward is higher than the reward threshold, it would stop the training kernel, cache the trained RL agent, and switch to the normal inference state. 
+After the AdaCompress is deployed, the input image scenery context $ \mathcal{X} $ may change (e.g., day to night, sunny to rainy). When the scenery changes, the older RL agent's compression selection strategy may not be suitable anymore, causing the overall accuracy to decrease. To cope with the scenery change, AdaCompress invokes an estimator with a probability $ p_{\rm est} $. AdaCompress does this by generating a random value $ \xi \in (0,1) $ and comparing it to $ p_{\rm est} $. If $ \xi \leq p_{\rm est} $, the estimator would be invoked. AdaCompress would upload the reference image $ x_{\rm ref} $ along with the compressed image $ x_i $ to obtain $ \vec{y}_{\rm ref} $ and $ \vec{y}_i $, calculate $ \mathcal{A}_i $ and save the transition {\color{revise2}$ (s_i, c_i, r_i, s_{i+1},\mathcal{A}_i ) $} \iffalse $ (\phi_i, c_i, r_i, \mathcal{A}_i) $ \fi to the memory buffer $ \mathcal{D} $. The estimator also compares the recent $ n $ steps' average accuracy $ \bar{\mathcal{A}}_n $ and the initial accuracy threshold $ \mathcal{A}_0 $. Once the recent average accuracy is lower than the initial accuracy threshold, the estimator would query a RL agent model to replace the current agent model and test the performance of the loaded model. To test the loaded model's performance, the estimator computes the average accuracy $ \bar{\mathcal{A}}^*_n $. If $ \bar{\mathcal{A}}^*_n $ is still lower than the accuracy threshold, the estimator would invoke the RL training kernel to re-train the agent. Once the estimator discovers that the trained reward is higher than the reward threshold, it would stop the training kernel, cache the trained RL agent, and switch to the normal inference state. 
 
 Since the reference image $ x_{\rm ref} $ and the compressed image $ x_i $ are both needed in the re-training phase, causing a large upload image size overhead, especially when the scenery changes frequently (e.g., day to night, then night to day). To avoid unnecessary upload traffic load in the re-training phase, we build up the model caching library to cache the trained RL agent models. When capturing the scenery change, we firstly query a pre-trained model from the model caching library rather than re-training from scratch. %% \\
 
@@ -210,7 +269,7 @@ Most of the time, AdaCompress runs in this state. In this state, only the compre
 %\subsubsection{\textbf{Estimation}}
 \subsubsection{Estimation:}
 
-In this state, the reference image $ x_{\rm ref} $ and compressed image $ x_i $ are uploaded to the cloud-end simultaneously to obtain $ \vec{y}_{\rm ref} $ and $ \vec{y}_i $ which are used to calculate $ \mathcal{A}_i $. In each epoch $ i $, the transition $ (\phi_i, c_i, r_i, \mathcal{A}_i) $ is logged in the memory buffer $ \mathcal{D} $. When the average accuracy $ \bar{\mathcal{A}}_n $ of the latest $ n $ steps is higher than the accuracy threshold $ \mathcal{A}_0 $, the agent would stay in the estimation state with probability $ p_{\rm est} $ or switch to the inference state with probability $ 1 - p_{\rm est} $. Once the average accuracy $ \bar{\mathcal{A}}_n $ is lower than the initial accuracy threshold $ \mathcal{A}_0 $, indicating that the current agent is no more suitable for the current input image scenery, AdaCompress would turn into the model querying state and re-load a new RL agent model from the model caching library. %% \\
+In this state, the reference image $ x_{\rm ref} $ and compressed image $ x_i $ are uploaded to the cloud-end simultaneously to obtain $ \vec{y}_{\rm ref} $ and $ \vec{y}_i $ which are used to calculate $ \mathcal{A}_i $. In each epoch $ i $, the transition {\color{revise2}$ (s_i, c_i, r_i, s_{i+1},\mathcal{A}_i ) $} \iffalse $ (\phi_i, c_i, r_i, \mathcal{A}_i) $ \fi is logged in the memory buffer $ \mathcal{D} $. When the average accuracy $ \bar{\mathcal{A}}_n $ of the latest $ n $ steps is higher than the accuracy threshold $ \mathcal{A}_0 $, the agent would stay in the estimation state with probability $ p_{\rm est} $ or switch to the inference state with probability $ 1 - p_{\rm est} $. Once the average accuracy $ \bar{\mathcal{A}}_n $ is lower than the initial accuracy threshold $ \mathcal{A}_0 $, indicating that the current agent is no more suitable for the current input image scenery, AdaCompress would turn into the model querying state and re-load a new RL agent model from the model caching library. %% \\
 
 Therefore, the estimation probability of $ p_{\rm est} $ is vital to the whole system. On the one hand, the estimator should be invoked occasionally to estimate the current agent's accuracy for capturing the scenery change on time. On the other hand, the estimator uploads the reference image along with the compressed image. Therefore, the upload image size overhead is greater than the conventional benchmark solution, causing a high upload traffic load. %% \\
 
