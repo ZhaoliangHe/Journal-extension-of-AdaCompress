@@ -25,7 +25,7 @@
 	\label{fig: framework}
 \end{figure*}
 
-A brief framework of AdaCompress is shown in Figure~\ref{fig: framework}. Briefly, it is a reinforcement learning-based system to train an agent to choose a proper compression quality level $ c $ for one image to be compressed by JPEG. We discuss the formulation, agent design, reinforcement learning-based framework, reward feedback, \emph{inference-estimation-querying-retraining} mechanism, and insight of RL agent's behaviors separately in the following subsections. We provide experimental details of all the hyperparameters in Section.~\ref{Section: evaluation}. %% \\
+A brief framework of AdaCompress is shown in Figure~\ref{fig: framework}. Briefly, it is a reinforcement learning-based system to train an agent to choose a proper compression quality level $ c $ for one image to be compressed by JPEG. We discuss the formulation, agent design, reinforcement learning-based framework, reward feedback, \emph{inference-estimation-querying-retraining} mechanism, and insight of RL agent's behaviors separately in the following subsections. We provide experimental details of all the hyperparameters in Section~\ref{Section: evaluation}. %% \\
 
 \subsection{Problem Formulation}
 \label{subsec: formulation}
@@ -49,7 +49,7 @@ Initially, the agent tries different compression quality levels $ c_{\min} < c <
 
 \subsection{RL Agent Design}
 
-The RL agent is expected to give a proper compression quality level $ c $ for minimizing the file size {\color{revise2}$ \hat{s}_c $} while keeping the accuracy $ \mathcal{A} $. For the RL agent, the input features are continuous numerical vectors, and the expected output is discrete compression quality level $ c $. Therefore we can use the Deep Q-learning Network as the RL agent. But the naive Deep Q-learning Network can not work well in this task because of the following challenges: %% \\
+The RL agent is expected to give a proper compression quality level $ c $ for minimizing the file size {\color{revise2}$ \hat{s}_c $} while keeping the accuracy $ \mathcal{A} $. {\color{revise2} In our design, each compression is treated as a complete RL task that only has one step, and the agent performs the action only once to accomplish the task. The agent is able to learn across consecutive tasks, because the input sequence (i.e., consecutive images likely to be captured by the same camera) shares similar contextual characteristics. The similar design has also been used in previous studies, including RL-based cache strategy \cite{wang2020intelligent_RL,zhong2018deep_RL,sadeghi2019deep_RL}.} For the RL agent, the input features are continuous numerical vectors, and the expected output is discrete compression quality level $ c $. Therefore we can use the Deep Q-learning Network as the RL agent. But the naive Deep Q-learning Network can not work well in this task because of the following challenges: %% \\
 
 \begin{itemize}
 	\item The state space of reinforcement learning is too large. To preserve enough details, we have to add many layers and nodes to the neural network, making the RL agent extremely difficult to converge. 

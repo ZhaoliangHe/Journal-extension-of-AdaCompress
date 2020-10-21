@@ -5,7 +5,7 @@ In this section, we present AdaCompress's behaviors and effectiveness by some re
 
 \subsection{Experiment Setup}
 
-We carry out real-world experiments to verify our solution's performance. We use a desktop PC with an NVIDIA 1080ti graphic card as the edge infrastructure. For the cloud-based deep learning services, we choose Baidu Vision, Face++ object detection services and Amazon Rekognition. In the experiments, we use two datasets mentioned before in Subsection.~\ref{subsec:insight}. The ImageNet dataset indicates daytime scenery, and the FLIR Thermal Dataset indicates nighttime scenery. Some important hyperparameters in our experiments are given in Table ~\ref{tab: parameters}.
+We carry out real-world experiments to verify our solution's performance. We use a desktop PC with an NVIDIA 1080ti graphic card as the edge infrastructure. For the cloud-based deep learning services, we choose Baidu Vision, Face++ object detection services and Amazon Rekognition. In the experiments, we use two datasets mentioned before in Subsection~\ref{subsec:insight}. The ImageNet dataset indicates daytime scenery, and the FLIR Thermal Dataset indicates nighttime scenery. Some important hyperparameters in our experiments are given in Table ~\ref{tab: parameters}.
 
 \begin{table*}[!t]
 	\centering
@@ -54,7 +54,7 @@ We use the ImageNet dataset in size reduction and accuracy performance experimen
 
 The default compression quality level for JPEG is usually $75$ \cite{pillow_benchmark,imgmin}. Therefore we regard this as a reference value $ c_{\rm ref} = 75 $ of the conventional benchmark.
 
-In our experiments, we measure the compressed and reference image's file size to obtain the compression rate $ \Delta s $. Since we do not have the real ground truth label of an image, we use the output $ \vec{y}_{\rm ref} $ from a reference image as the ground truth label, and calculate the relative top-5 accuracy $ \mathcal{A} $ as the accuracy metric. The formula of $ \mathcal{A} $ is presented in Subsection.~\ref{subsec: formulation}.
+In our experiments, we measure the compressed and reference image's file size to obtain the compression rate $ \Delta s $. Since we do not have the real ground truth label of an image, we use the output $ \vec{y}_{\rm ref} $ from a reference image as the ground truth label, and calculate the relative top-5 accuracy $ \mathcal{A} $ as the accuracy metric. The formula of $ \mathcal{A} $ is presented in Subsection~\ref{subsec: formulation}.
 
 \subsection{Upload Image Size Overhead}
 
