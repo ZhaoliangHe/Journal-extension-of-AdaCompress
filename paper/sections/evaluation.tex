@@ -5,7 +5,7 @@ In this section, we present AdaCompress's behaviors and effectiveness by some re
 
 \subsection{Experiment Setup}
 
-We carry out real-world experiments to verify our solution's performance. We use a desktop PC with an NVIDIA 1080ti graphic card as the edge infrastructure. For the cloud-based deep learning services, we choose Baidu Vision, Face++ object detection services and Amazon Rekognition. In the experiments, we use two datasets mentioned before in Subsection~\ref{subsec:insight}. The ImageNet dataset indicates daytime scenery, and the FLIR Thermal Dataset indicates nighttime scenery. Some important hyperparameters in our experiments are given in Table ~\ref{tab: parameters}.
+We carry out real-world experiments to verify our solution's performance. We use a desktop PC with an NVIDIA 1080ti graphic card as the edge infrastructure. For the cloud-based deep learning services, we choose Baidu Vision, Face++ object detection services and Amazon Rekognition. {\color{revise3}For the compression framework, we choose the JPEG compression method and use PIL library \cite{pillow_benchmark} to complete the JPEG compression process, which can take the compression quality level input. Especially, each compression quality level represents a quantization table in JPEG compression standard \cite{jpeg}.} In the experiments, we use two datasets mentioned before in Subsection~\ref{subsec:insight}. The ImageNet dataset indicates daytime scenery, and the FLIR Thermal Dataset indicates nighttime scenery. Some important hyperparameters in our experiments are given in Table ~\ref{tab: parameters}.
 
 \begin{table*}[!t]
 	\centering
@@ -65,8 +65,8 @@ In our experiments, we measure the compressed and reference image's file size to
 	% \vspace{-0.3cm}
 \end{figure}
 
-Figure~\ref{fig: train_steps} presents the upload traffic load of the training and inference phase. To be more intuitionistic, we plot the size overhead {\color{revise2} $ \frac{\hat{s}}{\hat{s}_{\rm ref}} $} \iffalse $ \frac{s}{s_{\rm ref}} $ \fi as the $ y $-axis where {\color{revise2} $ \hat{s} $} is the real upload size of AdaCompress and {\color{revise2} $ \hat{s}_{\rm ref} $} is the benchmark upload size. Therefore $ y \geq 1 $ means that our solution uploads more data then benchmark, and $ y < 1 $ means the compression rate of AdaCompress. From Figure~\ref{fig: train_steps}, we can see that as the training procedure runs, the upload image size decreases because the RL agent learns to choose better compression quality levels to upload less data. In the training phase, to train the agent while remaining a convincing recognition result, AdaCompress has to upload the original image along with the compressed image to the cloud-end, obtaining the real result and the reward feedback. Therefore the upload traffic load is even higher than the conventional solution. But once the training phase has finished, the upload traffic load is lower than the benchmark. As shown in Figure~\ref{fig: compress_performance}, in the inference phase, AdaCompress's upload size is only 1/2 of the benchmark's. %% \\
-
+Figure~\ref{fig: train_steps} presents the upload traffic load of the training and inference phase. To be more intuitionistic, we plot the size overhead {\color{revise2} $ \frac{\hat{s}}{\hat{s}_{\rm ref}} $} \iffalse $ \frac{s}{s_{\rm ref}} $ \fi as the $ y $-axis where {\color{revise2} $ \hat{s} $} is the real upload size of AdaCompress and {\color{revise2} $ \hat{s}_{\rm ref} $} is the benchmark upload size. Therefore $ y \geq 1 $ means that our solution uploads more data then benchmark, and $ y < 1 $ means the compression rate of AdaCompress. From Figure~\ref{fig: train_steps}, we can see that as the training procedure runs, the upload image size decreases because the RL agent learns to choose better compression quality levels to upload less data. In the training phase, to train the agent while remaining a convincing recognition result, AdaCompress has to upload the original image along with the compressed image to the cloud-end, obtaining the real result and the reward feedback. \textcolor{revise3}{Therefore the upload traffic load is even higher than the conventional solution, and the accuracy is locked to 1 because AdaCompress uses the original image’s prediction label as the output result.} But once the training phase has finished, the upload traffic load is lower than the benchmark. As shown in Figure~\ref{fig: compress_performance}, in the inference phase, AdaCompress's upload size is only 1/2 of the benchmark's. %% \\
+%Therefore the upload traffic load is even higher than the conventional solution.
 \subsection{Size Reduction and Accuracy Performance}
 
 \begin{figure}[!t]
@@ -169,6 +169,7 @@ We illustrate AdaCompress's behaviors in Figure~\ref{fig: running-retrain}. The 
 	\caption{AdaCompress's reactions upon scenery change}
 	%    \vspace{-0.2cm}
 	\label{fig: running-retrain}
+\vspace{-0.1cm} 
 \end{figure}
 
 From Figure~\ref{fig: running-retrain}, we can see that AdaCompress can adaptively update the estimation probability $ p_{\rm est} $. When the overall accuracy decreases, AdaCompress would increase the estimation probability, trying to capture the scenery change. When the overall accuracy is stable and high enough, the estimation probability $ p_{\rm est} $ decreases to reduce transmission. %% \\
@@ -250,3 +251,7 @@ Our solution brings in inference latency to the end-to-end latency, but the tran
 %And the training time respectively is 15.36 min and 15.63 min on ImageNet and FLIR.
 
 \textcolor{revise}{The \emph{inference-estimation-querying-retraining} mechanism would either re-load or re-train a RL agent intelligently when capturing the scenery change. The re-training time cost is similar to the training time cost which is described above. The latency of re-loading a RL agent model is about 1.85s. To \emph{reduce} this latency, we use another process to re-load the model in our experiments. The mechanism still uses the old RL agent to choose a compression quality level before the re-loading process has finished.}
+
+\subsection{Applicability for Different Image Compression Methods}
+
+{\color{revise3} In our experiment, we choose the JPEG compression method as the compression framework. Furthermore, our framework is applicative for different image compression techniques, both traditional compression methods and neural network-based learned compression methods. Existing traditional compression methods all have an optional compression level, e.g., JPEG and WebP have the compression quality level, H.265/HEVC \cite{hevc} and H.266/VVC \cite{vvc} have the quantization parameter (QP). Neural network-based learned image compression is a Lagrangian multiplier-based rate-distortion optimization, which commonly has a tradeoff parameter that controls the rate-distortion tradeoff \cite{endtoend1,endtoend2,endtoend3,endtoend4}. Different values are corresponding to different bit rates. We can regard this tradeoff parameter as the compression level. These different compression techniques all can flexibly take a compression level as the input.}
