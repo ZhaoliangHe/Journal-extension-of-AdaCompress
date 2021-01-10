@@ -43,7 +43,9 @@ Without loss of generality, we denote the cloud-based deep learning service as $
 
 Where $ j = 1,...,5 $ indicates the prediction labels at the top-5 score, meaning that if any one of the top-5 predicted labels matches the ground truth label $ \vec{y}_{\rm ref} $, it would be regarded as a correct prediction. In general, we cannot get the cloud-based deep learning model's in-layer details (e.g., softmax probabilities) for a cloud-based deep learning service. Therefore we use a binary hard label $ d(x, y) \in \{0, 1\} $ to evaluate the accuracy. %% $ d(x, y) \in \{0, 1\} $
 
-We also denote JPEG input images as $ f_{ic} = J(x_i, c) $ that for an input image $ x_i $ and a given compression quality level $ c $, and it outputs a compressed file $ f_{ic} $ at the size of {\color{revise2} $ \hat{s}_{ic} $}. For a reference compression quality level $ c_{\rm ref} $, the compressed file size is {\color{revise2} $ \hat{s}_{\rm ref} $}. Besides, the input image from a specific scenery usually belongs to a particular contextual group~\cite{mcdnn}. For example, in the daytime, the input images are expected to have a bright background, while nighttime images are usually gray-scaled thermal images. Therefore, the agent in one scenery does not need to know all the contextual features in all ``sceneries''. We formulate this as contextual group $ \mathcal{X} $.
+We also denote JPEG input images as $ f_{ic} = J(x_i, c) $ that for an input image $ x_i $ and a given compression quality level $ c $, and it outputs a compressed file $ f_{ic} $ at the size of {\color{revise2} $ \hat{s}_{ic} $}. For a reference compression quality level $ c_{\rm ref} $, the compressed file size is {\color{revise2} $ \hat{s}_{\rm ref} $}. {\color{revise3}Besides JPEG compression method, our framework is applicative for different image compression techniques, both traditional compression methods \cite{jpeg,webp,hevc,vvc} and neural network-based learned compression methods \cite{endtoend1,endtoend2,endtoend3,endtoend4}, which all have an optional compression level (rate-distortion tradeoff parameter).} 
+
+Besides, the input image from a specific scenery usually belongs to a particular contextual group~\cite{mcdnn}. For example, in the daytime, the input images are expected to have a bright background, while nighttime images are usually gray-scaled thermal images. Therefore, the agent in one scenery does not need to know all the contextual features in all ``sceneries''. We formulate this as contextual group $ \mathcal{X} $.
 %This contextual grouping concept is also discussed in~\cite{mcdnn}.
 
 Initially, the agent tries different compression quality levels $ c_{\min} < c < c_{\max}, c \in \mathbb{N} $ to obtain compressed image $ x_c $ from input image $ x $. To obtain cloud-end recognition results $ \{\vec{y}_{\rm ref}, \vec{y}_c\} $, the agent uploads the compressed image $ x_c $ and the reference image $ x_{\rm ref} $ to the cloud-end. Comparing the two uploaded instances $ \{x_{\rm ref}, x_c\} $ and cloud-end recognition results $ \{\vec{y}_{\rm ref}, \vec{y}_c\} $, the agent obtains the reference file size {\color{revise2}$ \hat{s}_{\rm ref} $} and compressed file size {\color{revise2}$ \hat{s}_c $}, and computes the file compression ratio {\color{revise2}$ \Delta s = \frac{\hat{s}_c}{\hat{s}_{\rm ref}} $} and accuracy metric $ \mathcal{A}_c $.
@@ -64,17 +66,20 @@ To address these challenges, we use the early layers of a pre-trained neural net
 
 In a specific scenery where the user input image $ x $ belongs to the contextual group $ \mathcal{X} $, we define the contextual group $ \mathcal{X} $, along with the backend cloud model $ M $, as the \emph{emulator environment} $ \{\mathcal{X}, M\} $ of the reinforcement learning problem. 
 
-{\color{revise3} We start by giving some basics on Markov decision processes (MDPs) \cite{MDP}, which is represented by a tuple $<S,C,P,R,\gamma>$, where $S$ denotes a set of possible states $s$, $C$ a set of feasible actions $c$, $P$ the set of state transition probabilities, $R$ a reward function, and $\gamma$ a discount factor. We formulate the feature extractor's output  $ s = \mathcal{E}(J(\mathcal{X}, c)) $ as \emph{states} and the compression quality level $ c $ as discrete \emph{actions}. In our system, to accelerate training, we define 10 discrete actions to indicate 10 compression quality levels of JPEG ranging from $ 5, 15, ...,95 $. We use $P_{ss'}^{c} = P \big[s' \mid s, c = \pi(s) \big]$ to denote the state transition probability from state $s$ to $s'$, where $\pi$ is a compression strategy mapping state to actions. We therefore obtain a sequence of states and actions $\{ s_1,c_1,s_2,...,c_{t-1},s_t \}$, and this formulation is a MDP.}
+{\color{revise3} We start by giving some basics on Markov decision processes (MDPs) \cite{MDP}, which is represented by a tuple $<S,C,P,R,\gamma>$, where $S$ denotes a set of possible states $s$, $C$ a set of feasible actions $c$, $P$ the set of state transition probabilities, $R$ a future reward function, and $\gamma$ a discount factor. We formulate the feature extractor's output  $ s = \mathcal{E}(J(\mathcal{X}, c)) $ as \emph{states} and the compression quality level $ c $ as discrete \emph{actions}. In our system, to accelerate training, we define 10 discrete actions to indicate 10 compression quality levels of JPEG ranging from $ 5, 15, ...,95 $. In our design, a compression task only has one step, detailed discussed in \ref{RL Design}. Therefore the next state and current action are only related to the current state, not to the historical states (i.e., $P_{s_{t}s_{t+1}}^{c_{t}} = P [s_{t+1} \mid s_{t}, c_t , s_{t-1}, c_{t-1},... ] = P [s_{t+1} \mid s_{t}, c_t ] ; P [ a_{t} \mid s_{1},s_{2},...,s_{t},a_{1},a_{2},...a_{t-1}] = P [ a_{t} \mid s_{t} ]$ ), satisfying Markov property.} 
 
-{\color{revise3} The goal of the agent is to interact with the emulator environment $ \{\mathcal{X}, M\} $ by selecting actions in a way that maximises future reward $R$. We define the future discounted reward at time t as $R_t = \sum_{\hat{t}=t}^{T'} \gamma^{\hat{t}-t}r_{\hat{t}}$ , where $T'$ is the step at which the task terminates. In our design, a compression task only has one step, detailed discussed in \ref{RL Design}}.
+%Therefore the next state is only  We use $P_{ss'}^{c} = P \big[s' \mid s, c = \pi(s) \big]$ to denote the state transition probability from state $s$ to $s'$, where $\pi$ is a compression strategy mapping state to actions.  
+%
+%We therefore obtain a sequence of states and actions $\{ s_1,c_1,s_2,...,c_{t-1},s_t \}$, and this formulation is a MDP.}
 
-{\color{revise3} We denote the optimal \emph{action-value function} as the maximum expected reward $ Q^{*}(\mathcal{E}(f_t), c; \theta) = \max_{\pi} \mathbb{E} \big[R_t \mid s_t=s,c_t=c,\pi\big]$ to learn the optimal compression strategy $\pi$, where $ \theta $ indicates the parameters of the Deep Q-learning Network $ \phi $. The optimal compression quality level at time $ t $ as $  c_t = {\rm argmax}_cQ(\mathcal{E}(f_t), c; \theta) $. Also, the optimal action-value function obeys an important identity known as the Bellman equation, and the optimal strategy is to select the action $c'$ maximising the expected value of $r + \gamma Q^{*}(s', c'; \theta) $ \cite{DQN}.}
+{\color{revise3} The goal of the agent is to interact with the emulator environment $ \{\mathcal{X}, M\} $ by selecting actions in a way that maximizes future reward $R$. We define the future discounted reward at time t as $R_t = \sum_{\hat{t}=t}^{T'} \gamma^{\hat{t}-t}r_{\hat{t}}$ , where $T'$ is the step at which the task terminates.}{\color{revise3} We denote the optimal \emph{action-value function} as the maximum expected reward $ Q(\mathcal{E}(f_t), c; \theta) = \max_{\pi} \mathbb{E} \big[R_t \mid s_t=s,c_t=c,\pi\big]$ to learn the optimal compression strategy $\pi$, where $ \theta $ indicates the parameters of the Deep Q-learning Network $ \phi $. The optimal compression quality level at time $ t $ as $  c_t = {\rm argmax}_cQ(\mathcal{E}(f_t), c; \theta) $. Also, the optimal action-value function obeys an important identity known as the Bellman equation, and the optimal strategy is to select the action $c'$ maximising the expected value of $r + \gamma Q(s_{t+1}, c'; \theta) $ \cite{DQN}.}
 
 %The basic idea behind many reinforcement learning algorithms is to estimate the action-value function, by using the Bellman equation as an iterative update $ Q(s, c; \theta_{i}) = \mathbb{E}_{s' \sim \{\mathcal{X}, M\}} \big[ r + \gamma \max_{c'} Q(s', c'; \theta_{i-1}) \mid s, c \big] $. 	
 	
 %We denote the \emph{action-value function} as {\color{revise2} $ Q(\mathcal{E}(f_t), c; \theta) $} \iffalse $ Q(\phi(\mathcal{E}(f_t)), c; \theta) $ \fi and the optimal compression quality level at time $ t $ as {\color{revise2} $  c_t = {\rm argmax}_cQ(\mathcal{E}(f_t), c; \theta) $} \iffalse $ c_t = {\rm argmax}_cQ(\phi(\mathcal{E}(f_t)), c; \theta) $ \fi where $ \theta $ indicates the parameters of the Deep Q-learning Network $ \phi $.
 
-In such reinforcement learning formulation, the training phase is to minimize the loss function $ L_i(\theta_i) = \mathbb{E}_{s, c \sim \rho (\cdot)}\Big[\big(y_i - Q(s, c; \theta_i)\big)^2 \Big] $ that changes at each iteration $ i $ where {\color{revise2} state $ s = \mathcal{E}(f_i) $} and target $ y_i = \mathbb{E}_{s' \sim \{\mathcal{X}, M\}} \big[ r + \gamma \max_{c'} Q(s', c'; \theta_{i-1}) \mid s, c \big] $. Especially, $ r $ is the reward feedback, and $ \rho(s, c) $ is a probability distribution over {\color{revise2} state} \iffalse sequences \fi $ s $ and the compression quality level $ c $~\cite{DQN}. When minimizing the distance of \emph{action-value function}'s output $ Q(\cdot) $ and target $ y_i $, the \emph{action-value function} $ Q(\cdot) $ outputs a more accurate estimation of an action. 
+%In such reinforcement learning formulation, the training phase is to minimize the loss function $ L_i(\theta_i) = \mathbb{E}_{s, c \sim \rho (\cdot)}\Big[\big(y_i - Q(s, c; \theta_i)\big)^2 \Big] $ that changes at each iteration $ i $ where {\color{revise2} state $ s = \mathcal{E}(f_i) $} and target $ y_i = \mathbb{E}_{s' \sim \{\mathcal{X}, M\}} \big[ r + \gamma \max_{c'} Q(s', c'; \theta_{i-1}) \mid s, c \big] $. Especially, $ r $ is the reward feedback, and $ \rho(s, c) $ is a probability distribution over {\color{revise2} state} \iffalse sequences \fi $ s $ and the compression quality level $ c $~\cite{DQN}. When minimizing the distance of \emph{action-value function}'s output $ Q(\cdot) $ and target $ y_i $, the \emph{action-value function} $ Q(\cdot) $ outputs a more accurate estimation of an action. 
+In such reinforcement learning formulation, the training phase is to minimize the loss function $ L_t(\theta_t) = \mathbb{E}_{s, c \sim \rho (\cdot)}\Big[\big(y_t - Q(s, c; \theta_t)\big)^2 \Big] $ that changes at each iteration $ t $ where {\color{revise2} state $ s = \mathcal{E}(f_t) $} and target $ y_t = \mathbb{E}_{s^{t+1} \sim \{\mathcal{X}, M\}} \big[ r + \gamma \max_{c'} Q(s_{t+1}, c'; \theta_{t-1}) \mid s, c \big] $. Especially, $ r $ is the reward feedback, and $ \rho(s, c) $ is a probability distribution over {\color{revise2} state} \iffalse sequences \fi $ s $ and the compression quality level $ c $~\cite{DQN}. When minimizing the distance of \emph{action-value function}'s output $ Q(\cdot) $ and target $ y_t $, the \emph{action-value function} $ Q(\cdot) $ outputs a more accurate estimation of an action. 
 
 Different from conventional reinforcement learning, the interactions between the agent and environment are infinite, i.e., there is no signal from the environment telling that an episode has finished. Therefore, we train the RL agent intermittently at a manual interval of $ T $ after the condition $ t \geq T_{\rm start} $ guaranteeing that there are enough transitions in the memory buffer $ \mathcal{D} $. In the training phase, the RL agent firstly takes some random trials to observe the environment's reaction and decreases the randomness when training afterward. {\color{revise2} In iteration $t$, we  leverage the feature extractor $\mathcal{E}$ to obtain state $s_t = \mathcal{E}(J(x_t,c_{ref}))$. The RL agent $\phi$ generates a compression quality level $c_t$. The framework compresses image $x_t$ at quality $c_t$ to upload and obtains reward $r_t$. Then the framework obtains the next image $x_{t+1}$ and generates the next state $ s_{t+1} = \mathcal{E}\big(J(x_{t+1},c_{ref})\big) $. The framework stores transition $(s_t, c_t, r_t, s_{t+1},\mathcal{A}_t )$ in a memory buffer $\mathcal{D}$. Especially, $(s_t, c_t, r_t, s_{t+1} )$ is used to compute the loss function, and $(r_t,\mathcal{A}_t )$ is used in the inference-estimation-querying-retraining mechanism to be discussed in Section \ref{subsec: mechanism}.} All transitions are saved into a memory buffer $ \mathcal{D} $, and the agent learns to optimize its \emph{action} by minimizing the loss function $ L $ on a mini-batch from $ \mathcal{D} $. The training procedure would converge when the agent's randomness keeps decaying. Finally, the agent's action is based on its historical ``optimal'' experiences. The training procedure is presented in Algorithm~\ref{alg: rl-train}.
 % and we list the parameters in Section.~\ref{Section: evaluation}.
@@ -345,7 +350,7 @@ In the inference phase, the pre-trained RL agent chooses a proper compression qu
 	\caption{\textcolor{revise}{Histogram of RL agent's best compression quality level selection for different cloud services}}
 	\label{fig: quality_chosen}
 }
-\vspace{-0.2cm} 
+%\vspace{-0.2cm} 
 \end{figure*}
 %\vspace{-0.3cm}
 %\begin{figure}[!t]
@@ -354,6 +359,23 @@ In the inference phase, the pre-trained RL agent chooses a proper compression qu
 %	\label{fig: quality_chosen}
 %	% \vspace{-0.3cm}
 %\end{figure}
+
+\begin{figure*}[!t]
+	{\color{revise}
+		\begin{minipage}[t]{0.48\linewidth}
+			\centerline{\includegraphics[width=7cm]{figures/ImageNet_Baidu_choices.pdf}}
+			\centerline{(a) ImageNet images}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[t]{0.48\linewidth}
+			\centerline{\includegraphics[width=7cm]{figures/FLIR_Baidu_choices.pdf}}
+			\centerline{(b) FLIR images}
+		\end{minipage}	
+		\caption{\textcolor{revise}{Histogram of RL agent's best compression quality level selection for different scenery image inputs}}
+		\label{fig: dataset_change}
+	}
+	\vspace{-0.2cm} 
+\end{figure*}
 
 Moreover, in our experiment, the agent presents different behaviors when the input image changes from one dataset to another. Figure~\ref{fig: dataset_change} shows the agent's choices for the same backend cloud model (Baidu Vision) but different image datasets. We prepare two datasets indicating two contextual ``sceneries''. We randomly sample images from ImageNet~\cite{ImageNet} whose images are mostly taken in the daytime, to act as a daytime scenery, and randomly select nighttime images from the FLIR Thermal Dataset~\cite{FLIR} to form another dataset to act as a nighttime scenery. \textcolor{revise}{The histogram shown in Figure~\ref{fig: dataset_change} points out that the distribution of compression quality levels is different on ImageNet and FLIR Thermal Dataset. For ImageNet and FLIR, the mean is 43.3 and 47.5, respectively; and the standard deviation is 19.52 and 26.56, respectively.} To maintain high accuracy when the input image's contextual group $ \mathcal{X} $ changes, the agent's compression quality level selection should change as well. This phenomenon presents that the agent can adaptively choose a proper compression quality level based on the input image's features.
 
@@ -366,23 +388,6 @@ Moreover, in our experiment, the agent presents different behaviors when the inp
 %    \caption{Histogram of RL agent's best compression level selection for different scenery image inputs}
 %    \label{fig: dataset_change}
 %\end{figure}
-
-\begin{figure*}[!t]
-{\color{revise}
-	\begin{minipage}[t]{0.48\linewidth}
-		\centerline{\includegraphics[width=7cm]{figures/ImageNet_Baidu_choices.pdf}}
-		\centerline{(a) ImageNet images}
-	\end{minipage}
-	\hfill
-	\begin{minipage}[t]{0.48\linewidth}
-		\centerline{\includegraphics[width=7cm]{figures/FLIR_Baidu_choices.pdf}}
-		\centerline{(b) FLIR images}
-	\end{minipage}	
-    \caption{\textcolor{revise}{Histogram of RL agent's best compression quality level selection for different scenery image inputs}}
-	\label{fig: dataset_change}
-}
-\vspace{-0.1cm} 
-\end{figure*}
 
 %\subsubsection{\textbf{Attention Map Variation}}
 \subsubsection{Attention Map Variation:}
